@@ -1,1380 +1,1788 @@
-<!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<!doctype html>
+<html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PeanutCrate | Artisanal Peanut Snacks & Treats Delivered Monthly</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter & Fredoka for playful typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        sunshine: {
-                            DEFAULT: '#FFC83B',
-                            hover: '#EBB020',
-                            light: '#FFF5D6',
-                            bright: '#FFD043'
-                        },
-                        coral: {
-                            DEFAULT: '#FF6F59',
-                            dark: '#E0533D',
-                            light: '#FFEBE8',
-                            accent: '#FF5A42'
-                        },
-                        sand: {
-                            DEFAULT: '#FFF8EE',
-                            card: '#FFF0DB',
-                            dark: '#F7EBE1',
-                            border: '#EED9C4'
-                        },
-                        peanut: {
-                            DEFAULT: '#4A2C11',
-                            dark: '#2D1808',
-                            light: '#7A4D23',
-                            muted: '#8C6747'
-                        }
-                    },
-                    fontFamily: {
-                        display: ['Fredoka', 'sans-serif'],
-                        body: ['Plus Jakarta Sans', 'sans-serif']
-                    },
-                    boxShadow: {
-                        'playful': '0 10px 25px -5px rgba(255, 111, 89, 0.25), 0 8px 10px -6px rgba(74, 44, 17, 0.1)',
-                        'card-playful': '0 8px 0px 0px #EED9C4',
-                        'card-active': '0 4px 0px 0px #EED9C4',
-                        'button-coral': '0 6px 0px 0px #E0533D',
-                        'button-sunshine': '0 6px 0px 0px #D9A016',
-                    },
-                    keyframes: {
-                        bounceLittle: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-6px)' }
-                        },
-                        wiggle: {
-                            '0%, 100%': { transform: 'rotate(-3deg)' },
-                            '50%': { transform: 'rotate(3deg)' }
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-12px)' }
-                        }
-                    },
-                    animation: {
-                        'bounce-soft': 'bounceLittle 2s infinite ease-in-out',
-                        'wiggle': 'wiggle 1s infinite ease-in-out',
-                        'float': 'float 4s infinite ease-in-out',
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #FFF8EE;
-            color: #4A2C11;
-        }
-        h1, h2, h3, h4, .font-display {
-            font-family: 'Fredoka', cursive;
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 8px;
-            width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #FFF0DB;
-            border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #FF6F59;
-            border-radius: 10px;
-        }
-        .glass-nav {
-            background: rgba(255, 248, 238, 0.85);
-            backdrop-filter: blur(12px);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitHub Glass Card</title>
+  <meta name="description" content="Turn your GitHub profile into a liquid-glass card you can sign and download." />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="GitHub Glass Card" />
+  <meta property="og:description"
+    content="Turn your GitHub profile into a liquid-glass card you can sign and download." />
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500;1,600&display=swap"
+    rel="stylesheet" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      background: #090d16;
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+      color: #fff;
+      height: 100%;
+      width: 100%;
+    }
+
+    img.hidden-src {
+      display: none;
+    }
+
+    #glcanvas {
+      position: fixed;
+      inset: 0;
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+    }
+
+    /* ---------- Left Control Panel ---------- */
+    #panel {
+      position: absolute;
+      left: 5vw;
+      top: 50%;
+      transform: translateY(-50%);
+      width: clamp(310px, 32vw, 410px);
+      padding: 26px 28px 24px;
+      border-radius: 26px;
+      max-height: 94vh;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(24px) saturate(1.3);
+      -webkit-backdrop-filter: blur(24px) saturate(1.3);
+      color: #fff;
+      z-index: 5;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    }
+
+    #panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #panel::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 3px;
+    }
+
+    .badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      margin-bottom: 12px;
+    }
+
+    .badge-tag span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #38ef7d;
+      box-shadow: 0 0 8px #38ef7d;
+    }
+
+    #panel h1 {
+      margin: 0 0 8px;
+      font-size: clamp(22px, 2vw, 27px);
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+    }
+
+    #panel p.lead {
+      margin: 0 0 18px;
+      font-size: 14px;
+      line-height: 1.48;
+      color: rgba(255, 255, 255, 0.92);
+      font-weight: 500;
+    }
+
+    #panel label.field-label {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+      margin-bottom: 14px;
+    }
+
+    .glass-input {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 999px;
+      padding: 0 16px;
+      background: rgba(255, 255, 255, 0.08);
+      height: 46px;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .glass-input:focus-within {
+      border-color: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .glass-input svg {
+      flex: 0 0 auto;
+      opacity: 0.95;
+    }
+
+    .glass-input input {
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      border: 0;
+      outline: none;
+      color: #fff;
+      font-size: 14.5px;
+      font-family: inherit;
+      font-weight: 600;
+    }
+
+    .glass-input input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 500;
+    }
+
+    .pill-white {
+      border: 0;
+      border-radius: 999px;
+      background: #fff;
+      color: #0f1a2a;
+      font-family: inherit;
+      font-size: 14.5px;
+      font-weight: 800;
+      padding: 0 22px;
+      cursor: pointer;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        background-color 0.12s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+    }
+
+    .pill-white:hover {
+      transform: translateY(-1px);
+      background: #f8fafc;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+    }
+
+    .pill-white:active {
+      transform: translateY(1px);
+    }
+
+    /* Background Buttons & Presets */
+    .bg-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .glass-btn {
+      width: 100%;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.38);
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    }
+
+    .glass-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: rgba(255, 255, 255, 0.6);
+      transform: translateY(-1px);
+    }
+
+    .glass-btn:active {
+      transform: translateY(0);
+    }
+
+    .presets-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.8);
+      margin: 6px 0 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .preset-thumb {
+      height: 38px;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.25);
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .preset-thumb:hover {
+      transform: scale(1.04);
+      border-color: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .preset-thumb.active {
+      border-color: #fff;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+    }
+
+    .preset-thumb span {
+      position: absolute;
+      bottom: 2px;
+      left: 0;
+      right: 0;
+      font-size: 9px;
+      font-weight: 700;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 1px 0;
+    }
+
+    .slider-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .slider-head .t {
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+
+    .slider-head .v {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 20px;
+      background: transparent;
+      cursor: pointer;
+      margin: 0 0 16px;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      margin-top: -6.5px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+      border: 0;
+      transition: transform 0.1s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    input[type="range"]::-moz-range-track {
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      border: 0;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .download-btn {
+      width: 100%;
+      height: 48px;
+      border-radius: 14px;
+      border: 0;
+      background: #fff;
+      color: #101c2e;
+      font-family: inherit;
+      font-size: 15.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      margin-top: 4px;
+    }
+
+    .download-btn svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.32);
+    }
+
+    .download-btn:active {
+      transform: translateY(1px);
+    }
+
+    #status {
+      font-size: 12.5px;
+      min-height: 18px;
+      margin: 10px 0 0;
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* ---------- GitHub Glass Card ---------- */
+    #card {
+      position: absolute;
+      width: clamp(310px, 28vw, 375px);
+      padding: 26px 24px 22px;
+      z-index: 6;
+      border-radius: 34px;
+      color: var(--ink, #fff);
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: box-shadow 0.2s ease;
+    }
+
+    #card.dragging {
+      cursor: grabbing;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    #card .avatar-wrap {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      background: #1e293b;
+      border: 3px solid rgba(255, 255, 255, 0.9);
+      overflow: hidden;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+      position: relative;
+    }
+
+    #card .avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    #card h2 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: -0.3px;
+      word-break: break-word;
+    }
+
+    #card .login {
+      margin: 3px 0 10px;
+      font-size: 14.5px;
+      font-weight: 700;
+      text-align: center;
+      opacity: 0.95;
+    }
+
+    #card .desc {
+      margin: 0 auto 16px;
+      font-size: 13.5px;
+      line-height: 1.42;
+      text-align: center;
+      max-width: 290px;
+      font-weight: 500;
+      opacity: 0.95;
+    }
+
+    .stats {
+      display: flex;
+      gap: 9px;
+      margin-bottom: 13px;
+    }
+
+    .stat {
+      flex: 1;
+      border-radius: 16px;
+      padding: 11px 4px 9px;
+      text-align: center;
+      border: 1px solid rgba(var(--ink-rgb, 255, 255, 255), 0.4);
+      background: rgba(var(--ink-rgb, 255, 255, 255), 0.08);
+    }
+
+    .stat .num {
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .stat .lbl {
+      font-size: 11.5px;
+      font-weight: 700;
+      opacity: 0.9;
+      margin-top: 2px;
+      text-transform: capitalize;
+    }
+
+    .panel-box {
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 13px;
+      border: 1px solid rgba(var(--ink-rgb, 255, 255, 255), 0.4);
+      background: rgba(var(--ink-rgb, 255, 255, 255), 0.08);
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .panel-head .t {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .panel-head .y {
+      font-size: 12px;
+      font-weight: 700;
+      opacity: 0.9;
+    }
+
+    #contribCanvas {
+      width: 100%;
+      height: 54px;
+      display: block;
+    }
+
+    .sig-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    .sig-head .t {
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .clear-pill {
+      border-radius: 999px;
+      padding: 3px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(var(--ink-rgb, 255, 255, 255), 0.5);
+      background: rgba(var(--ink-rgb, 255, 255, 255), 0.08);
+      color: var(--ink, #fff);
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .clear-pill:hover {
+      background: rgba(var(--ink-rgb, 255, 255, 255), 0.2);
+    }
+
+    .sig-area {
+      position: relative;
+      height: 68px;
+    }
+
+    #sigCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    #sigPlaceholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-style: italic;
+      font-size: 13.5px;
+      font-weight: 600;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .sig-line {
+      height: 0;
+      border-bottom: 1.5px solid rgba(var(--ink-rgb, 255, 255, 255), 0.55);
+      margin: 0 4px;
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 9px;
+      margin-top: 13px;
+      margin-bottom: 2px;
+    }
+
+    .meta-tile {
+      flex: 1;
+      min-width: 0;
+      height: 44px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--ink, #fff);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 0 12px;
+      border: 1px solid rgba(var(--ink-rgb, 255, 255, 255), 0.4);
+      background: rgba(var(--ink-rgb, 255, 255, 255), 0.08);
+    }
+
+    .meta-tile svg {
+      flex: 0 0 auto;
+      width: 15px;
+      height: 15px;
+    }
+
+    .meta-tile span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .built-credit {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      margin: 0;
+      padding: 7px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+      z-index: 10;
+    }
+
+    .built-credit a {
+      color: #fff;
+      text-decoration: underline;
+      font-weight: 700;
+    }
+
+    /* Drag hint badge */
+    .drag-hint {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.6);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    /* Responsive layout */
+    @media (max-width: 1000px) {
+      #panel {
+        left: 3vw;
+        width: clamp(290px, 42vw, 380px);
+      }
+
+      #card {
+        width: clamp(290px, 38vw, 350px);
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      html,
+      body {
+        overflow-y: auto;
+        height: auto;
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      #glcanvas {
+        position: fixed;
+      }
+
+      #card {
+        order: 1;
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        width: min(92vw, 360px);
+        margin: 24px auto 0;
+        cursor: default;
+      }
+
+      .drag-hint {
+        display: none;
+      }
+
+      #panel {
+        order: 2;
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        width: min(92vw, 420px);
+        margin: 20px auto 80px;
+        max-height: none;
+      }
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-sunshine selection:text-peanut">
 
-    <!-- Announcement Bar -->
-    <div class="bg-coral text-white py-2 px-4 text-center text-sm font-semibold tracking-wide shadow-inner flex items-center justify-center gap-2">
-        <span class="bg-white text-coral text-xs px-2 py-0.5 rounded-full font-extrabold uppercase">Limited Offer</span>
-        <span>🎉 Get $5 OFF your first monthly box with code <strong class="underline decoration-wavy underline-offset-2">NUTTY5</strong> at checkout!</span>
+<body>
+  <img id="srcImage" class="hidden-src" crossorigin="anonymous" alt="" />
+  <canvas id="glcanvas"></canvas>
+
+  <!-- ============ LEFT CONTROL PANEL ============ -->
+  <div id="panel">
+    <div class="badge-tag">
+      <span class="dot"></span> Liquid Glass Studio
+    </div>
+    <h1>GitHub Glass Card</h1>
+    <p class="lead">
+      Turn your GitHub profile into an interactive liquid-glass badge you can sign and download.
+    </p>
+
+    <label class="field-label" for="usernameInput">Enter GitHub username</label>
+    <div class="input-row">
+      <div class="glass-input">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="#fff" aria-hidden="true">
+          <path
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+        </svg>
+        <input id="usernameInput" type="text" placeholder="e.g. octocat, torvalds" value="octocat" spellcheck="false"
+          autocomplete="off" />
+      </div>
+      <button id="buildBtn" class="pill-white">
+        <span>Build</span>
+      </button>
     </div>
 
-    <!-- Navigation Bar -->
-    <header id="navbar" class="sticky top-0 z-40 transition-all duration-300 border-b border-transparent">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <!-- Logo -->
-                <a href="#" class="flex items-center gap-3 group">
-                    <div class="w-12 h-12 rounded-2xl bg-sunshine flex items-center justify-center shadow-md group-hover:rotate-6 transition-transform duration-300 border-2 border-peanut">
-                        <!-- Peanut SVG Icon -->
-                        <svg class="w-8 h-8 text-peanut" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12,2A4.5,4.5 0 0,0 7.5,6.5C7.5,7.8 8.1,8.9 9,9.7C8.4,11.2 8,12.8 8,14.5A5.5,5.5 0 0,0 13.5,20A5.5,5.5 0 0,0 19,14.5C19,12.8 18.6,11.2 18,9.7C18.9,8.9 19.5,7.8 19.5,6.5A4.5,4.5 0 0,0 15,2C13.8,2 12.8,2.5 12,3.3C11.2,2.5 10.2,2 9,2H12M12,5A1.5,1.5 0 0,1 13.5,6.5A1.5,1.5 0 0,1 12,8A1.5,1.5 0 0,1 10.5,6.5A1.5,1.5 0 0,1 12,5M13.5,12A2.5,2.5 0 0,1 16,14.5A2.5,2.5 0 0,1 13.5,17A2.5,2.5 0 0,1 11,14.5A2.5,2.5 0 0,1 13.5,12Z"/>
-                        </svg>
-                    </div>
-                    <div>
-                        <span class="font-display text-2xl sm:text-3xl font-bold tracking-wide text-peanut block leading-none">Peanut<span class="text-coral">Crate</span></span>
-                        <span class="text-[10px] font-bold text-peanut-muted tracking-widest uppercase block -mt-0.5">Snack Better</span>
-                    </div>
-                </a>
-
-                <!-- Desktop Nav Links -->
-                <nav class="hidden md:flex items-center gap-8 text-base font-bold text-peanut">
-                    <a href="#how-it-works" class="hover:text-coral transition-colors">How It Works</a>
-                    <a href="#whats-inside" class="hover:text-coral transition-colors">What's Inside</a>
-                    <a href="#pricing" class="hover:text-coral transition-colors">Plans & Pricing</a>
-                    <a href="#quiz" class="hover:text-coral transition-colors flex items-center gap-1.5 text-coral">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Flavor Quiz
-                    </a>
-                    <a href="#reviews" class="hover:text-coral transition-colors">Reviews</a>
-                    <a href="#faq" class="hover:text-coral transition-colors">FAQs</a>
-                </nav>
-
-                <!-- Header CTA -->
-                <div class="hidden sm:flex items-center gap-3">
-                    <a href="#pricing" class="bg-coral hover:bg-coral-dark text-white px-5 py-2.5 rounded-full font-display font-semibold text-lg shadow-button-coral active:translate-y-1 active:shadow-none transition-all duration-150 border-2 border-peanut">
-                        Claim Your Box
-                    </a>
-                </div>
-
-                <!-- Mobile Menu Button -->
-                <button id="mobileMenuBtn" class="md:hidden p-2 rounded-xl text-peanut hover:bg-sand-dark transition-colors focus:outline-none">
-                    <i class="fa-solid fa-bars text-2xl"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Drawer -->
-        <div id="mobileMenu" class="hidden md:hidden bg-sand-card border-b-2 border-peanut px-4 pt-3 pb-6 space-y-3">
-            <a href="#how-it-works" class="mobile-link block px-3 py-2 rounded-lg font-bold text-peanut hover:bg-sunshine-light">How It Works</a>
-            <a href="#whats-inside" class="mobile-link block px-3 py-2 rounded-lg font-bold text-peanut hover:bg-sunshine-light">What's Inside</a>
-            <a href="#pricing" class="mobile-link block px-3 py-2 rounded-lg font-bold text-peanut hover:bg-sunshine-light">Plans & Pricing</a>
-            <a href="#quiz" class="mobile-link block px-3 py-2 rounded-lg font-bold text-coral hover:bg-sunshine-light"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Flavor Quiz</a>
-            <a href="#reviews" class="mobile-link block px-3 py-2 rounded-lg font-bold text-peanut hover:bg-sunshine-light">Reviews</a>
-            <a href="#faq" class="mobile-link block px-3 py-2 rounded-lg font-bold text-peanut hover:bg-sunshine-light">FAQs</a>
-            <a href="#pricing" class="mobile-link block w-full text-center bg-coral text-white px-5 py-3 rounded-xl font-display font-bold text-lg shadow-button-coral border-2 border-peanut">
-                Claim Your Box Now
-            </a>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="relative pt-6 pb-16 md:pt-12 md:pb-24 overflow-hidden">
-        <!-- Decorative Background Bubbles -->
-        <div class="absolute top-10 left-[-5%] w-64 h-64 bg-sunshine-light rounded-full blur-3xl -z-10 opacity-70"></div>
-        <div class="absolute bottom-10 right-[-5%] w-80 h-80 bg-coral-light rounded-full blur-3xl -z-10 opacity-70"></div>
-
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                
-                <!-- Left Hero Content -->
-                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
-                    <div class="inline-flex items-center gap-2 bg-sunshine-light border-2 border-sunshine px-4 py-1.5 rounded-full text-peanut font-bold text-sm animate-bounce-soft">
-                        <i class="fa-solid fa-star text-sunshine-hover"></i>
-                        <span>#1 Rated Snack Subscription Box of 2026</span>
-                    </div>
-
-                    <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-peanut leading-tight">
-                        Nutty Delights & <span class="text-coral underline decoration-sunshine decoration-wavy">Artisanal Peanut Snacks</span>, Delivered Monthly!
-                    </h1>
-
-                    <p class="text-lg sm:text-xl text-peanut-light max-w-2xl font-medium leading-relaxed mx-auto lg:mx-0">
-                        Unbox gourmet roasted peanut brittles, small-batch nut butters, spicy crunch mixes, and rare chocolate clusters. Crafted by artisanal nut masters and delivered right to your door.
-                    </p>
-
-                    <!-- CTAs -->
-                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-                        <a href="#pricing" class="w-full sm:w-auto text-center bg-coral hover:bg-coral-dark text-white px-8 py-4 rounded-2xl font-display text-xl font-bold shadow-button-coral active:translate-y-1 active:shadow-none transition-all border-2 border-peanut">
-                            Get Started – From $19.99/mo <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
-                        </a>
-                        <a href="#whats-inside" class="w-full sm:w-auto text-center bg-white hover:bg-sand-card text-peanut px-6 py-4 rounded-2xl font-display text-lg font-bold shadow-card-playful border-2 border-peanut active:translate-y-1 active:shadow-none transition-all">
-                            See Past Boxes <i class="fa-solid fa-eye ml-1 text-coral"></i>
-                        </a>
-                    </div>
-
-                    <!-- Trust Badges Bar -->
-                    <div class="pt-6 border-t border-sand-border/80 grid grid-cols-3 gap-4 text-center lg:text-left">
-                        <div class="flex flex-col sm:flex-row items-center gap-2 justify-center lg:justify-start">
-                            <div class="w-9 h-9 rounded-full bg-sunshine-light border border-sunshine flex items-center justify-center text-peanut">
-                                <i class="fa-solid fa-truck-fast"></i>
-                            </div>
-                            <span class="text-xs sm:text-sm font-bold text-peanut">Free USA Shipping</span>
-                        </div>
-                        <div class="flex flex-col sm:flex-row items-center gap-2 justify-center lg:justify-start">
-                            <div class="w-9 h-9 rounded-full bg-sunshine-light border border-sunshine flex items-center justify-center text-peanut">
-                                <i class="fa-solid fa-arrows-rotate"></i>
-                            </div>
-                            <span class="text-xs sm:text-sm font-bold text-peanut">Cancel Anytime</span>
-                        </div>
-                        <div class="flex flex-col sm:flex-row items-center gap-2 justify-center lg:justify-start">
-                            <div class="w-9 h-9 rounded-full bg-sunshine-light border border-sunshine flex items-center justify-center text-peanut">
-                                <i class="fa-solid fa-shield-heart"></i>
-                            </div>
-                            <span class="text-xs sm:text-sm font-bold text-peanut">100% Fresh Guarantee</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Hero Graphic Mockup -->
-                <div class="lg:col-span-5 relative flex justify-center">
-                    <div class="relative w-full max-w-md animate-float">
-                        <!-- Main Crate Graphics Card -->
-                        <div class="bg-sand-card border-4 border-peanut rounded-3xl p-6 shadow-playful relative z-10 overflow-hidden">
-                            <!-- Badge Top Corner -->
-                            <div class="absolute -top-1 -right-1 bg-sunshine border-2 border-peanut px-4 py-1.5 rounded-bl-2xl font-display font-bold text-sm text-peanut shadow-sm">
-                                THIS MONTH'S BOX
-                            </div>
-
-                            <div class="text-center pt-3 pb-2">
-                                <span class="bg-coral text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">The "Autumn Crunch" Edition</span>
-                                <h3 class="font-display text-2xl font-bold text-peanut mt-2">PeanutCrate Box Preview</h3>
-                            </div>
-
-                            <!-- Box treats illustration / stack -->
-                            <div class="space-y-3 my-4">
-                                <!-- Snack item 1 -->
-                                <div class="bg-white p-3 rounded-xl border-2 border-peanut/20 flex items-center gap-3 shadow-sm hover:translate-x-1 transition-transform">
-                                    <div class="w-12 h-12 rounded-lg bg-amber-100 border border-amber-300 flex items-center justify-center text-2xl">
-                                        🥜
-                                    </div>
-                                    <div class="text-left flex-1">
-                                        <h4 class="font-bold text-peanut text-sm">Honey Roasted Espresso Peanuts</h4>
-                                        <p class="text-xs text-peanut-muted">Double-roasted with organic coffee beans</p>
-                                    </div>
-                                    <span class="text-xs font-bold text-coral bg-coral-light px-2 py-1 rounded-md">Artisanal</span>
-                                </div>
-
-                                <!-- Snack item 2 -->
-                                <div class="bg-white p-3 rounded-xl border-2 border-peanut/20 flex items-center gap-3 shadow-sm hover:translate-x-1 transition-transform">
-                                    <div class="w-12 h-12 rounded-lg bg-orange-100 border border-orange-300 flex items-center justify-center text-2xl">
-                                        🌶️
-                                    </div>
-                                    <div class="text-left flex-1">
-                                        <h4 class="font-bold text-peanut text-sm">Chipotle Lime Peanuts</h4>
-                                        <p class="text-xs text-peanut-muted">Slow smoky kick with fresh zesty citrus</p>
-                                    </div>
-                                    <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2 py-1 rounded-md">Spicy</span>
-                                </div>
-
-                                <!-- Snack item 3 -->
-                                <div class="bg-white p-3 rounded-xl border-2 border-peanut/20 flex items-center gap-3 shadow-sm hover:translate-x-1 transition-transform">
-                                    <div class="w-12 h-12 rounded-lg bg-amber-200 border border-amber-400 flex items-center justify-center text-2xl">
-                                        🧈
-                                    </div>
-                                    <div class="text-left flex-1">
-                                        <h4 class="font-bold text-peanut text-sm">Stone-Ground Maple Butter</h4>
-                                        <p class="text-xs text-peanut-muted">8oz jar • Single origin peanuts & Vermont syrup</p>
-                                    </div>
-                                    <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-md">Full Jar</span>
-                                </div>
-                            </div>
-
-                            <div class="bg-sunshine/30 rounded-xl p-3 border border-sunshine text-center">
-                                <p class="text-xs font-bold text-peanut">🎁 Plus 2 surprise samples & recipe card included!</p>
-                            </div>
-                        </div>
-
-                        <!-- Floating Accent Tags -->
-                        <div class="absolute -bottom-4 -left-6 bg-sunshine border-2 border-peanut text-peanut px-4 py-2 rounded-2xl font-display font-bold text-sm shadow-card-playful z-20 hidden sm:block animate-wiggle">
-                            ⭐ 8 Craveable Treats
-                        </div>
-                        <div class="absolute -top-6 -left-4 bg-white border-2 border-peanut text-peanut px-4 py-2 rounded-2xl font-display font-bold text-sm shadow-card-playful z-20 hidden sm:block">
-                            🥜 Always Fresh
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section id="how-it-works" class="py-16 bg-white border-y-2 border-peanut">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center max-w-3xl mx-auto mb-14">
-                <span class="bg-coral-light text-coral font-bold text-sm px-4 py-1.5 rounded-full border border-coral/30 uppercase tracking-wider">Simple & Tasty</span>
-                <h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-peanut mt-3">How PeanutCrate Works</h2>
-                <p class="text-peanut-light text-lg font-medium mt-3">Three effortless steps to snacking bliss. No commitments, total control.</p>
-            </div>
-
-            <!-- 3 Step Interactive Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-
-                <!-- Connector Line for Desktop -->
-                <div class="hidden md:block absolute top-1/2 left-1/6 right-1/6 h-1 border-t-4 border-dashed border-sand-border -translate-y-8 -z-0"></div>
-
-                <!-- Step 1 -->
-                <div class="how-card group bg-sand border-2 border-peanut rounded-3xl p-8 relative z-10 shadow-card-playful hover:shadow-playful hover:-translate-y-2 transition-all duration-300">
-                    <div class="w-16 h-16 rounded-2xl bg-sunshine border-2 border-peanut flex items-center justify-center font-display text-2xl font-bold text-peanut mb-6 group-hover:rotate-12 transition-transform">
-                        01
-                    </div>
-                    <div class="text-4xl mb-4">🎯</div>
-                    <h3 class="font-display text-2xl font-bold text-peanut mb-3">Pick Your Craving</h3>
-                    <p class="text-peanut-light font-medium text-base">
-                        Select your favorite flavor profile! Whether you love classic sweet honey roasted, extreme spicy chili, or artisanal nut spreads.
-                    </p>
-                    
-                    <!-- Interactive mini preference selector -->
-                    <div class="mt-6 pt-4 border-t border-sand-border flex gap-2 flex-wrap">
-                        <span class="text-xs bg-white border border-peanut/30 text-peanut px-2.5 py-1 rounded-lg font-semibold">🍯 Sweet</span>
-                        <span class="text-xs bg-white border border-peanut/30 text-peanut px-2.5 py-1 rounded-lg font-semibold">🌶️ Spicy</span>
-                        <span class="text-xs bg-white border border-peanut/30 text-peanut px-2.5 py-1 rounded-lg font-semibold">🧂 Savory</span>
-                    </div>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="how-card group bg-sand border-2 border-peanut rounded-3xl p-8 relative z-10 shadow-card-playful hover:shadow-playful hover:-translate-y-2 transition-all duration-300">
-                    <div class="w-16 h-16 rounded-2xl bg-coral border-2 border-peanut flex items-center justify-center font-display text-2xl font-bold text-white mb-6 group-hover:rotate-12 transition-transform">
-                        02
-                    </div>
-                    <div class="text-4xl mb-4">📦</div>
-                    <h3 class="font-display text-2xl font-bold text-peanut mb-3">We Pack Fresh</h3>
-                    <p class="text-peanut-light font-medium text-base">
-                        Our master roasters small-batch craft every batch. Packed in airtight eco-friendly pouches so every crunch bursts with maximum freshness.
-                    </p>
-                    <div class="mt-6 pt-4 border-t border-sand-border flex items-center gap-2 text-xs font-bold text-coral">
-                        <i class="fa-solid fa-certificate"></i> Artisanal Quality Guaranteed
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="how-card group bg-sand border-2 border-peanut rounded-3xl p-8 relative z-10 shadow-card-playful hover:shadow-playful hover:-translate-y-2 transition-all duration-300">
-                    <div class="w-16 h-16 rounded-2xl bg-sunshine border-2 border-peanut flex items-center justify-center font-display text-2xl font-bold text-peanut mb-6 group-hover:rotate-12 transition-transform">
-                        03
-                    </div>
-                    <div class="text-4xl mb-4">🚀</div>
-                    <h3 class="font-display text-2xl font-bold text-peanut mb-3">Enjoy Monthly Magic</h3>
-                    <p class="text-peanut-light font-medium text-base">
-                        Unbox delight on your doorstep every month. Easily pause, skip a box, swap flavor mixes, or cancel anytime with one click!
-                    </p>
-                    <div class="mt-6 pt-4 border-t border-sand-border flex items-center gap-2 text-xs font-bold text-emerald-700">
-                        <i class="fa-solid fa-check-circle"></i> Zero Long-Term Contracts
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Past Box Items Preview / Gallery Carousel -->
-    <section id="whats-inside" class="py-16 bg-sand relative overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-                <div>
-                    <span class="bg-sunshine text-peanut font-bold text-sm px-4 py-1.5 rounded-full border border-peanut/20 uppercase tracking-wider">Taste The Variety</span>
-                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-peanut mt-2">What's Inside Our Crates</h2>
-                    <p class="text-peanut-light text-base font-medium mt-1">Explore a sample of gourmet treats featured in past monthly boxes. Click any treat for details!</p>
-                </div>
-
-                <!-- Filter Pills -->
-                <div id="snackFilters" class="flex flex-wrap gap-2">
-                    <button data-filter="all" class="filter-btn active bg-peanut text-white px-4 py-2 rounded-xl text-sm font-bold border-2 border-peanut transition-all">All Treats</button>
-                    <button data-filter="sweet" class="filter-btn bg-white hover:bg-sand-card text-peanut px-4 py-2 rounded-xl text-sm font-bold border-2 border-peanut/20 transition-all">Sweet</button>
-                    <button data-filter="spicy" class="filter-btn bg-white hover:bg-sand-card text-peanut px-4 py-2 rounded-xl text-sm font-bold border-2 border-peanut/20 transition-all">Spicy & Savory</button>
-                    <button data-filter="spread" class="filter-btn bg-white hover:bg-sand-card text-peanut px-4 py-2 rounded-xl text-sm font-bold border-2 border-peanut/20 transition-all">Nut Butters</button>
-                </div>
-            </div>
-
-            <!-- Carousel Grid -->
-            <div id="snackGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Snack items rendered via JS for interactivity -->
-            </div>
-
-            <!-- Bottom CTA Banner inside Gallery -->
-            <div class="mt-12 bg-sunshine-light border-2 border-sunshine rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
-                <div class="flex items-center gap-4 text-center md:text-left">
-                    <div class="w-16 h-16 rounded-2xl bg-sunshine border-2 border-peanut flex items-center justify-center text-3xl shrink-0 hidden sm:flex">
-                        🥜
-                    </div>
-                    <div>
-                        <h4 class="font-display text-xl font-bold text-peanut">Want all these delicious treats?</h4>
-                        <p class="text-sm font-medium text-peanut-light">Every monthly crate includes a curated mix tailored to your personal preferences.</p>
-                    </div>
-                </div>
-                <a href="#pricing" class="bg-coral hover:bg-coral-dark text-white font-display font-bold px-6 py-3 rounded-xl border-2 border-peanut shadow-button-coral whitespace-nowrap active:translate-y-1">
-                    Get This Month's Crate
-                </a>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Interactive Box Customizer / Quiz Section -->
-    <section id="quiz" class="py-16 bg-white border-y-2 border-peanut">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6">
-            
-            <div class="bg-sand-card border-3 border-peanut rounded-3xl p-6 sm:p-10 shadow-playful relative overflow-hidden">
-                <div class="absolute -right-10 -bottom-10 text-9xl opacity-10 pointer-events-none">🥜</div>
-
-                <div class="text-center max-w-xl mx-auto mb-8">
-                    <span class="bg-coral text-white font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">30-Second Quiz</span>
-                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-peanut mt-2">Find Your Perfect Crate</h2>
-                    <p class="text-peanut-light text-base font-medium mt-1">Answer 3 simple questions to discover your ideal peanut snack lineup and plan match!</p>
-                </div>
-
-                <!-- Quiz Box Container -->
-                <div id="quizContainer" class="bg-white border-2 border-peanut/30 rounded-2xl p-6 sm:p-8 shadow-sm">
-                    
-                    <!-- Progress Bar -->
-                    <div class="mb-6">
-                        <div class="flex justify-between text-xs font-bold text-peanut-muted mb-2">
-                            <span id="quizStepLabel">Question 1 of 3</span>
-                            <span id="quizPercent">33% Completed</span>
-                        </div>
-                        <div class="w-full bg-sand-dark h-3 rounded-full overflow-hidden border border-peanut/20">
-                            <div id="quizProgressBar" class="bg-coral h-full w-1/3 transition-all duration-300"></div>
-                        </div>
-                    </div>
-
-                    <!-- Question Step 1 -->
-                    <div id="quizStep1" class="quiz-step space-y-4">
-                        <h3 class="font-display text-xl sm:text-2xl font-bold text-peanut text-center">What's your ultimate flavor craving?</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                            <button onclick="selectQuizAnswer(1, 'Sweet')" class="quiz-opt-btn bg-sand hover:bg-sunshine-light border-2 border-peanut p-4 rounded-xl font-bold text-peanut text-left flex flex-col items-center text-center gap-2 hover:-translate-y-1 transition-all">
-                                <span class="text-3xl">🍯</span>
-                                <span>Sweet & Caramelized</span>
-                                <span class="text-xs text-peanut-muted font-normal">Honey roasted, cinnamon, dark chocolate</span>
-                            </button>
-                            <button onclick="selectQuizAnswer(1, 'Spicy')" class="quiz-opt-btn bg-sand hover:bg-sunshine-light border-2 border-peanut p-4 rounded-xl font-bold text-peanut text-left flex flex-col items-center text-center gap-2 hover:-translate-y-1 transition-all">
-                                <span class="text-3xl">🌶️</span>
-                                <span>Bold & Spicy</span>
-                                <span class="text-xs text-peanut-muted font-normal">Sriracha, jalapeno, habanero lime</span>
-                            </button>
-                            <button onclick="selectQuizAnswer(1, 'Savory')" class="quiz-opt-btn bg-sand hover:bg-sunshine-light border-2 border-peanut p-4 rounded-xl font-bold text-peanut text-left flex flex-col items-center text-center gap-2 hover:-translate-y-1 transition-all">
-                                <span class="text-3xl">🧂</span>
-                                <span>Classic Smoky & Savory</span>
-                                <span class="text-xs text-peanut-muted font-normal">Sea salt, garlic butter, BBQ smoked</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Question Step 2 -->
-                    <div id="quizStep2" class="quiz-step space-y-4 hidden">
-                        <h3 class="font-display text-xl sm:text-2xl font-bold text-peanut text-center">How often do you snack on nuts?</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                            <button onclick="selectQuizAnswer(2, 'Occasional')" class="quiz-opt-btn bg-sand hover:bg-sunshine-light border-2 border-peanut p-4 rounded-xl font-bold text-peanut text-left flex flex-col items-center text-center gap-2 hover:-translate-y-1 transition-all">
-                                <span class="text-3xl">☕</span>
-                                <span>Light Snacker</span>
-                                <span class="text-xs text-peanut-muted font-normal">A handful during afternoon coffee</span>
-                            </button>
-                            <button onclick="selectQuizAnswer(2, 'Daily')" class="quiz-opt-btn bg-sand hover:bg-sunshine-light border-2 border-peanut p-4 rounded-xl font-bold text-peanut text-left flex flex-col items-center text-center gap-2 hover:-translate-y-1 transition-all">
-                                <span class="text-3xl">🐿️</span>
-                                <span>Daily Nut Fiend</span>
-                                <span class="text-xs text-peanut-muted font-normal">Need a daily crunchy fix at work or gym</span>
-                            </button>
-                            <button onclick="selectQuizAnswer(2, 'Family')" class="quiz-opt-btn bg-sand hover:bg-sunshine-light border-2 border-peanut p-4 rounded-xl font-bold text-peanut text-left flex flex-col items-center text-center gap-2 hover:-translate-y-1 transition-all">
-                                <span class="text-3xl">👨‍👩‍👧‍👦</span>
-                                <span>Sharing with Family</span>
-                                <span class="text-xs text-peanut-muted font-normal">Multiple people snacking at home</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Question Step 3 -->
-                    <div id="quizStep3" class="quiz-step space-y-4 hidden">
-                        <h3 class="font-display text-xl sm:text-2xl font-bold text-peanut text-center">Are you interested in artisanal peanut spreads/jars?</h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                            <button onclick="selectQuizAnswer(3, 'Yes Spreads')" class="quiz-opt-btn bg-sand hover:bg-sunshine-light border-2 border-peanut p-4 rounded-xl font-bold text-peanut text-left flex flex-col items-center text-center gap-2 hover:-translate-y-1 transition-all">
-                                <span class="text-3xl">🧈</span>
-                                <span>Yes, I Love Gourmet Jars!</span>
-                                <span class="text-xs text-peanut-muted font-normal">Include full-sized specialty peanut butters</span>
-                            </button>
-                            <button onclick="selectQuizAnswer(3, 'Only Snacks')" class="quiz-opt-btn bg-sand hover:bg-sunshine-light border-2 border-peanut p-4 rounded-xl font-bold text-peanut text-left flex flex-col items-center text-center gap-2 hover:-translate-y-1 transition-all">
-                                <span class="text-3xl">🥜</span>
-                                <span>Just Whole Snacks & Brittles</span>
-                                <span class="text-xs text-peanut-muted font-normal">Focus purely on crunchy roasted snacks</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Quiz Result View -->
-                    <div id="quizResult" class="hidden text-center space-y-6">
-                        <div class="w-20 h-20 bg-sunshine rounded-full border-2 border-peanut flex items-center justify-center text-4xl mx-auto animate-bounce-soft">
-                            🎉
-                        </div>
-                        <div>
-                            <span class="bg-coral-light text-coral font-bold text-xs px-3 py-1 rounded-full uppercase">Your Match Is Ready!</span>
-                            <h3 id="resultPlanTitle" class="font-display text-3xl font-extrabold text-peanut mt-2">The 'Nut Head' Plan</h3>
-                            <p id="resultPlanDesc" class="text-peanut-light max-w-md mx-auto mt-2">
-                                Based on your preferences, our 8-snack crate with 1 bonus artisan jar is the perfect crunch ratio!
-                            </p>
-                        </div>
-
-                        <div class="bg-sand p-4 rounded-xl border border-peanut/20 max-w-md mx-auto text-left space-y-2">
-                            <div class="font-bold text-sm text-peanut flex justify-between">
-                                <span>Recommended Box:</span>
-                                <span id="resultBoxType" class="text-coral">8 Snacks + 1 Spread Jar</span>
-                            </div>
-                            <div class="font-bold text-sm text-peanut flex justify-between">
-                                <span>Match Score:</span>
-                                <span class="text-emerald-600">99% Flavor Match</span>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row justify-center gap-3">
-                            <button onclick="triggerCheckoutFromQuiz()" class="bg-coral hover:bg-coral-dark text-white font-display font-bold px-8 py-3.5 rounded-xl border-2 border-peanut shadow-button-coral active:translate-y-1">
-                                Claim My Matched Crate <i class="fa-solid fa-arrow-right ml-1"></i>
-                            </button>
-                            <button onclick="resetQuiz()" class="bg-sand hover:bg-sand-dark text-peanut font-bold px-4 py-3 rounded-xl border-2 border-peanut/30">
-                                Retake Quiz
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section id="pricing" class="py-16 sm:py-24 bg-sand relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center max-w-3xl mx-auto mb-12">
-                <span class="bg-sunshine text-peanut font-bold text-sm px-4 py-1.5 rounded-full border border-peanut/20 uppercase tracking-wider">Flexible Subscription</span>
-                <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-peanut mt-3">Choose Your Crate Plan</h2>
-                <p class="text-peanut-light text-lg font-medium mt-3">Free USA shipping on all boxes. Pause, skip, or cancel with zero hassle anytime.</p>
-
-                <!-- Billing Toggle Switch -->
-                <div class="mt-8 inline-flex items-center gap-4 bg-white border-2 border-peanut p-2 rounded-2xl shadow-sm">
-                    <span id="monthlyLabel" class="font-bold text-sm sm:text-base text-peanut transition-colors">Monthly Billing</span>
-                    
-                    <button id="billingToggle" class="w-16 h-9 bg-sand-dark rounded-full p-1 border-2 border-peanut relative transition-colors focus:outline-none">
-                        <div id="toggleCircle" class="w-6 h-6 bg-coral rounded-full border border-peanut transition-transform duration-300"></div>
-                    </button>
-
-                    <span id="annualLabel" class="font-bold text-sm sm:text-base text-peanut-muted transition-colors flex items-center gap-1.5">
-                        Annual Billing 
-                        <span class="bg-sunshine text-peanut text-xs font-extrabold px-2.5 py-0.5 rounded-full border border-peanut/30 animate-pulse">Save 20%</span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Pricing Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
-                
-                <!-- Plan 1: The Nibbler -->
-                <div class="pricing-card bg-white border-2 border-peanut rounded-3xl p-8 flex flex-col justify-between shadow-card-playful hover:shadow-playful transition-all duration-300 relative">
-                    <div>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="font-display text-xl font-bold text-peanut">The Nibbler</span>
-                            <span class="text-2xl">🐿️</span>
-                        </div>
-                        <p class="text-xs text-peanut-muted font-medium mb-6">Perfect mini intro box for light snackers.</p>
-
-                        <div class="mb-6">
-                            <div class="flex items-baseline gap-1">
-                                <span class="font-display text-4xl sm:text-5xl font-extrabold text-peanut price-val" data-monthly="19.99" data-annual="15.99">$19.99</span>
-                                <span class="text-sm font-bold text-peanut-muted">/ month</span>
-                            </div>
-                            <span class="text-xs font-bold text-emerald-600 billing-desc">Billed monthly</span>
-                        </div>
-
-                        <ul class="space-y-3 mb-8 text-sm font-medium text-peanut">
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral"></i>
-                                <span><strong>4 Craft Snacks</strong> (Full Size)</span>
-                            </li>
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral"></i>
-                                <span>Sweet & Savory mix</span>
-                            </li>
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral"></i>
-                                <span>Free US Shipping</span>
-                            </li>
-                            <li class="flex items-center gap-2.5 opacity-40">
-                                <i class="fa-solid fa-xmark text-peanut-muted"></i>
-                                <span>Artisan Spread Jar</span>
-                            </li>
-                            <li class="flex items-center gap-2.5 opacity-40">
-                                <i class="fa-solid fa-xmark text-peanut-muted"></i>
-                                <span>Exclusive Merch Items</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <button onclick="selectPlan('The Nibbler', 19.99)" class="w-full bg-sand hover:bg-sand-dark text-peanut font-display font-bold py-3.5 rounded-xl border-2 border-peanut shadow-card-playful active:translate-y-1 active:shadow-none transition-all">
-                        Select Nibbler Box
-                    </button>
-                </div>
-
-                <!-- Plan 2: The Nut Head (Most Popular) -->
-                <div class="pricing-card bg-sunshine-light border-4 border-coral rounded-3xl p-8 flex flex-col justify-between shadow-playful transition-all duration-300 relative scale-100 lg:-translate-y-2">
-                    
-                    <!-- Popular Badge -->
-                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-coral text-white border-2 border-peanut px-4 py-1 rounded-full font-display font-bold text-xs uppercase tracking-wider shadow-sm">
-                        🔥 Most Popular Crate
-                    </div>
-
-                    <div>
-                        <div class="flex justify-between items-center mb-4 pt-2">
-                            <span class="font-display text-2xl font-extrabold text-peanut">The Nut Head</span>
-                            <span class="text-3xl">👑</span>
-                        </div>
-                        <p class="text-xs text-peanut-muted font-medium mb-6">Our flagship crate packed with maximum flavor variety.</p>
-
-                        <div class="mb-6">
-                            <div class="flex items-baseline gap-1">
-                                <span class="font-display text-5xl font-extrabold text-peanut price-val" data-monthly="29.99" data-annual="23.99">$29.99</span>
-                                <span class="text-sm font-bold text-peanut-muted">/ month</span>
-                            </div>
-                            <span class="text-xs font-bold text-emerald-600 billing-desc">Billed monthly</span>
-                        </div>
-
-                        <ul class="space-y-3.5 mb-8 text-sm font-semibold text-peanut">
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral text-base"></i>
-                                <span><strong>8 Craft Snacks</strong> (Full Size)</span>
-                            </li>
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral text-base"></i>
-                                <span><strong>1 Bonus Artisan Spread Jar</strong> (8oz)</span>
-                            </li>
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral text-base"></i>
-                                <span>Custom Flavor Profile Choice</span>
-                            </li>
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral text-base"></i>
-                                <span>Free Priority Shipping</span>
-                            </li>
-                            <li class="flex items-center gap-2.5 opacity-40">
-                                <i class="fa-solid fa-xmark text-peanut-muted"></i>
-                                <span>Exclusive Merch Items</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <button onclick="selectPlan('The Nut Head', 29.99)" class="w-full bg-coral hover:bg-coral-dark text-white font-display font-bold py-4 rounded-xl border-2 border-peanut shadow-button-coral active:translate-y-1 active:shadow-none transition-all text-lg">
-                        Claim Best Value Box
-                    </button>
-                </div>
-
-                <!-- Plan 3: Ultimate Peanut Lover -->
-                <div class="pricing-card bg-white border-2 border-peanut rounded-3xl p-8 flex flex-col justify-between shadow-card-playful hover:shadow-playful transition-all duration-300 relative">
-                    <div>
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="font-display text-xl font-bold text-peanut">Ultimate Lover</span>
-                            <span class="text-2xl">🎁</span>
-                        </div>
-                        <p class="text-xs text-peanut-muted font-medium mb-6">XL Party Crate for hardcore peanut enthusiasts.</p>
-
-                        <div class="mb-6">
-                            <div class="flex items-baseline gap-1">
-                                <span class="font-display text-4xl sm:text-5xl font-extrabold text-peanut price-val" data-monthly="44.99" data-annual="35.99">$44.99</span>
-                                <span class="text-sm font-bold text-peanut-muted">/ month</span>
-                            </div>
-                            <span class="text-xs font-bold text-emerald-600 billing-desc">Billed monthly</span>
-                        </div>
-
-                        <ul class="space-y-3 mb-8 text-sm font-medium text-peanut">
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral"></i>
-                                <span><strong>12 Craft Snacks</strong> (Full Size)</span>
-                            </li>
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral"></i>
-                                <span><strong>2 Bonus Artisan Jars</strong></span>
-                            </li>
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral"></i>
-                                <span><strong>1 Free Merch Item</strong> (Mug/Tee)</span>
-                            </li>
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral"></i>
-                                <span>VIP Early Access to New Flavors</span>
-                            </li>
-                            <li class="flex items-center gap-2.5">
-                                <i class="fa-solid fa-check text-coral"></i>
-                                <span>Free Express Shipping</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <button onclick="selectPlan('Ultimate Peanut Lover', 44.99)" class="w-full bg-sand hover:bg-sand-dark text-peanut font-display font-bold py-3.5 rounded-xl border-2 border-peanut shadow-card-playful active:translate-y-1 active:shadow-none transition-all">
-                        Select Ultimate Box
-                    </button>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Reviews Section -->
-    <section id="reviews" class="py-16 bg-white border-t-2 border-peanut">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <span class="bg-sunshine text-peanut font-bold text-sm px-4 py-1.5 rounded-full border border-peanut/20 uppercase tracking-wider">Happy Snackers</span>
-                <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-peanut mt-3">Loved By 15,000+ Nut Lovers</h2>
-                <div class="flex items-center justify-center gap-1 text-sunshine-hover text-xl mt-2">
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <i class="fa-solid fa-star"></i>
-                    <span class="text-sm font-bold text-peanut ml-2">4.9/5 Average Rating</span>
-                </div>
-            </div>
-
-            <!-- Review Cards Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                <div class="bg-sand p-6 rounded-2xl border-2 border-peanut shadow-card-playful flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex text-sunshine-hover text-sm">
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                            </div>
-                            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-check text-[10px]"></i> Verified Subscriber</span>
-                        </div>
-                        <p class="text-peanut font-medium text-sm leading-relaxed mb-4">
-                            "The Honey Roasted Espresso Peanuts changed my afternoon routine forever! I look forward to unboxing this crate every single month like a kid on Christmas."
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3 pt-3 border-t border-sand-border">
-                        <div class="w-10 h-10 rounded-full bg-coral text-white font-bold flex items-center justify-center font-display">
-                            SK
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-peanut text-sm">Sarah K.</h4>
-                            <p class="text-xs text-peanut-muted">Subscribed 8 months • Nut Head Plan</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-sand p-6 rounded-2xl border-2 border-peanut shadow-card-playful flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex text-sunshine-hover text-sm">
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                            </div>
-                            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-check text-[10px]"></i> Verified Subscriber</span>
-                        </div>
-                        <p class="text-peanut font-medium text-sm leading-relaxed mb-4">
-                            "I bought this as a gift for my husband who is obsessed with spicy peanuts. The Chipotle Lime and Sriracha roasted nuts were a massive hit! 10/10 recommendation."
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3 pt-3 border-t border-sand-border">
-                        <div class="w-10 h-10 rounded-full bg-sunshine text-peanut font-bold flex items-center justify-center font-display">
-                            MD
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-peanut text-sm">Marcus D.</h4>
-                            <p class="text-xs text-peanut-muted">Subscribed 1 year • Ultimate Plan</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-sand p-6 rounded-2xl border-2 border-peanut shadow-card-playful flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-3">
-                            <div class="flex text-sunshine-hover text-sm">
-                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                            </div>
-                            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-check text-[10px]"></i> Verified Subscriber</span>
-                        </div>
-                        <p class="text-peanut font-medium text-sm leading-relaxed mb-4">
-                            "The artisan Maple Peanut Butter jar alone is worth the subscription price. Super smooth, perfectly sweet, and zero artificial junk."
-                        </p>
-                    </div>
-                    <div class="flex items-center gap-3 pt-3 border-t border-sand-border">
-                        <div class="w-10 h-10 rounded-full bg-amber-700 text-white font-bold flex items-center justify-center font-display">
-                            EL
-                        </div>
-                        <div>
-                            <h4 class="font-bold text-peanut text-sm">Elena L.</h4>
-                            <p class="text-xs text-peanut-muted">Subscribed 4 months • Nut Head Plan</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- FAQ Section -->
-    <section id="faq" class="py-16 bg-sand border-t-2 border-peanut">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="text-center max-w-2xl mx-auto mb-12">
-                <span class="bg-coral-light text-coral font-bold text-sm px-4 py-1.5 rounded-full border border-coral/30 uppercase tracking-wider">Got Questions?</span>
-                <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-peanut mt-3">Frequently Asked Questions</h2>
-            </div>
-
-            <!-- Accordion Items -->
-            <div class="space-y-4">
-                
-                <div class="faq-item bg-white border-2 border-peanut rounded-2xl overflow-hidden transition-all">
-                    <button class="faq-btn w-full p-5 text-left font-display font-bold text-lg text-peanut flex justify-between items-center focus:outline-none">
-                        <span>When will my first PeanutCrate box ship?</span>
-                        <i class="fa-solid fa-plus text-coral transition-transform duration-200"></i>
-                    </button>
-                    <div class="faq-answer hidden px-5 pb-5 text-peanut-light font-medium text-base border-t border-sand-border/50 pt-3">
-                        Orders placed today ship within 24 to 48 hours! Future monthly boxes are billed on the 1st of each month and ship by the 5th, guaranteed fresh.
-                    </div>
-                </div>
-
-                <div class="faq-item bg-white border-2 border-peanut rounded-2xl overflow-hidden transition-all">
-                    <button class="faq-btn w-full p-5 text-left font-display font-bold text-lg text-peanut flex justify-between items-center focus:outline-none">
-                        <span>Can I pause or cancel my subscription anytime?</span>
-                        <i class="fa-solid fa-plus text-coral transition-transform duration-200"></i>
-                    </button>
-                    <div class="faq-answer hidden px-5 pb-5 text-peanut-light font-medium text-base border-t border-sand-border/50 pt-3">
-                        Yes! Absolutely zero long-term contracts. You can pause your subscription for a month, adjust your delivery frequency, or cancel with a single click inside your account dashboard.
-                    </div>
-                </div>
-
-                <div class="faq-item bg-white border-2 border-peanut rounded-2xl overflow-hidden transition-all">
-                    <button class="faq-btn w-full p-5 text-left font-display font-bold text-lg text-peanut flex justify-between items-center focus:outline-none">
-                        <span>How do allergen warnings work for other nuts or gluten?</span>
-                        <i class="fa-solid fa-plus text-coral transition-transform duration-200"></i>
-                    </button>
-                    <div class="faq-answer hidden px-5 pb-5 text-peanut-light font-medium text-base border-t border-sand-border/50 pt-3">
-                        All our products clearly list ingredients. While all items contain peanuts, we offer 100% Gluten-Free box customization options! Make sure to note any specific restrictions during checkout.
-                    </div>
-                </div>
-
-                <div class="faq-item bg-white border-2 border-peanut rounded-2xl overflow-hidden transition-all">
-                    <button class="faq-btn w-full p-5 text-left font-display font-bold text-lg text-peanut flex justify-between items-center focus:outline-none">
-                        <span>What if I don't like a specific flavor in my box?</span>
-                        <i class="fa-solid fa-plus text-coral transition-transform duration-200"></i>
-                    </button>
-                    <div class="faq-answer hidden px-5 pb-5 text-peanut-light font-medium text-base border-t border-sand-border/50 pt-3">
-                        We back every crate with our 100% Snack Happiness Guarantee. If a flavor isn't your favorite, let us know and we'll credit your account or swap it in your next crate free of charge.
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Footer Section -->
-    <footer class="bg-peanut text-sand py-16 border-t-4 border-sunshine">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-peanut-light/30">
-                
-                <!-- Brand Info -->
-                <div class="md:col-span-5 space-y-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-sunshine flex items-center justify-center border border-sand">
-                            <svg class="w-6 h-6 text-peanut" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M12,2A4.5,4.5 0 0,0 7.5,6.5C7.5,7.8 8.1,8.9 9,9.7C8.4,11.2 8,12.8 8,14.5A5.5,5.5 0 0,0 13.5,20A5.5,5.5 0 0,0 19,14.5C19,12.8 18.6,11.2 18,9.7C18.9,8.9 19.5,7.8 19.5,6.5A4.5,4.5 0 0,0 15,2C13.8,2 12.8,2.5 12,3.3C11.2,2.5 10.2,2 9,2H12M12,5A1.5,1.5 0 0,1 13.5,6.5A1.5,1.5 0 0,1 12,8A1.5,1.5 0 0,1 10.5,6.5A1.5,1.5 0 0,1 12,5M13.5,12A2.5,2.5 0 0,1 16,14.5A2.5,2.5 0 0,1 13.5,17A2.5,2.5 0 0,1 11,14.5A2.5,2.5 0 0,1 13.5,12Z"/>
-                            </svg>
-                        </div>
-                        <span class="font-display text-2xl font-bold text-white">Peanut<span class="text-sunshine">Crate</span></span>
-                    </div>
-
-                    <p class="text-sand/80 text-sm max-w-sm font-medium">
-                        Delivering artisanal peanut snacks, gourmet brittles, and handcrafted nut butters directly to snack enthusiasts across America.
-                    </p>
-
-                    <div class="flex gap-3 text-sunshine text-lg pt-2">
-                        <a href="#" class="w-9 h-9 rounded-full bg-peanut-dark flex items-center justify-center hover:bg-coral transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-peanut-dark flex items-center justify-center hover:bg-coral transition-colors"><i class="fa-brands fa-tiktok"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-peanut-dark flex items-center justify-center hover:bg-coral transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-                    </div>
-                </div>
-
-                <!-- Newsletter Form -->
-                <div class="md:col-span-7 bg-peanut-dark p-6 sm:p-8 rounded-2xl border border-peanut-light/20">
-                    <span class="bg-sunshine text-peanut font-bold text-xs px-3 py-1 rounded-full uppercase">Instant Discount</span>
-                    <h3 class="font-display text-2xl font-bold text-white mt-2">Get $5 Off Your First Crate</h3>
-                    <p class="text-sand/70 text-sm mt-1 mb-4">Subscribe to our monthly VIP snack digest and instantly receive your $5 discount code!</p>
-
-                    <form id="newsletterForm" class="flex flex-col sm:flex-row gap-3">
-                        <input type="email" id="newsletterEmail" required placeholder="Enter your email address" class="bg-sand text-peanut px-4 py-3 rounded-xl font-medium focus:outline-none focus:ring-2 focus:ring-sunshine flex-1 text-sm">
-                        <button type="submit" class="bg-coral hover:bg-coral-dark text-white font-display font-bold px-6 py-3 rounded-xl border border-sand/20 active:translate-y-0.5 whitespace-nowrap">
-                            Claim Discount
-                        </button>
-                    </form>
-                    <div id="newsletterSuccess" class="hidden text-xs font-bold text-sunshine mt-3 flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-check"></i> Code <span class="underline">NUTTY5</span> copied! Use it at checkout.
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Bottom Disclaimer & Copyright -->
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-sand/60 gap-4">
-                <p>© 2026 PeanutCrate LLC. All rights reserved. Handcrafted with ❤️ for nut lovers.</p>
-                <div class="flex gap-4">
-                    <a href="#" class="hover:underline">Privacy Policy</a>
-                    <a href="#" class="hover:underline">Terms of Service</a>
-                    <a href="#" class="hover:underline">Allergen Disclaimer</a>
-                </div>
-            </div>
-
-        </div>
-    </footer>
-
-    <!-- Snack Detail Modal -->
-    <div id="snackModal" class="fixed inset-0 bg-peanut-dark/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white border-3 border-peanut rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl animate-bounce-in">
-            <button onclick="closeSnackModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-sand hover:bg-sand-dark text-peanut font-bold flex items-center justify-center">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-
-            <div class="text-center pt-2">
-                <div id="modalEmoji" class="w-20 h-20 bg-sunshine-light border-2 border-peanut rounded-2xl flex items-center justify-center text-5xl mx-auto mb-4">
-                    🥜
-                </div>
-                <span id="modalBadge" class="bg-coral text-white font-bold text-xs px-3 py-1 rounded-full uppercase">Artisanal</span>
-                <h3 id="modalTitle" class="font-display text-2xl font-bold text-peanut mt-2">Snack Title</h3>
-                <p id="modalDesc" class="text-peanut-light text-sm font-medium mt-2">Description goes here.</p>
-            </div>
-
-            <div class="mt-6 pt-4 border-t border-sand-border space-y-3">
-                <div class="flex justify-between text-xs font-bold text-peanut">
-                    <span>Flavor Profile:</span>
-                    <span id="modalFlavor" class="text-coral">Sweet & Crunchy</span>
-                </div>
-                <div class="flex justify-between text-xs font-bold text-peanut">
-                    <span>Net Weight:</span>
-                    <span id="modalWeight">6.5 oz (184g)</span>
-                </div>
-                <div class="flex justify-between text-xs font-bold text-peanut">
-                    <span>Gluten Free:</span>
-                    <span id="modalGluten" class="text-emerald-600">Yes</span>
-                </div>
-            </div>
-
-            <button onclick="closeSnackModal()" class="w-full mt-6 bg-coral text-white font-display font-bold py-3 rounded-xl border-2 border-peanut shadow-button-coral">
-                Close Preview
-            </button>
-        </div>
+    <div class="presets-label">Background Presets</div>
+    <div class="preset-grid">
+      <div class="preset-thumb active" id="presetFlowers" title="Meadow Flowers"
+        style="background: linear-gradient(135deg, #4fa5e2, #e5989b);">
+        <span>Meadow</span>
+      </div>
+      <div class="preset-thumb" id="presetCosmic" title="Cosmic Nebula"
+        style="background: linear-gradient(135deg, #1b0947, #7928ca, #ff0080);">
+        <span>Cosmic</span>
+      </div>
+      <div class="preset-thumb" id="presetSunset" title="Sunset Glow"
+        style="background: linear-gradient(135deg, #ff4e50, #f9d423, #00c6ff);">
+        <span>Sunset</span>
+      </div>
+      <div class="preset-thumb" id="presetAurora" title="Aurora Emerald"
+        style="background: linear-gradient(135deg, #09203f, #537895, #43e97b);">
+        <span>Aurora</span>
+      </div>
     </div>
 
-    <!-- Direct Checkout Simulation Modal -->
-    <div id="checkoutModal" class="fixed inset-0 bg-peanut-dark/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-sand-card border-3 border-peanut rounded-3xl max-w-xl w-full p-6 sm:p-8 relative shadow-2xl overflow-y-auto max-h-[90vh]">
-            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white hover:bg-sand text-peanut font-bold flex items-center justify-center border border-peanut">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-
-            <div id="checkoutFormStep">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 rounded-xl bg-sunshine flex items-center justify-center border border-peanut text-xl">
-                        📦
-                    </div>
-                    <div>
-                        <h3 class="font-display text-2xl font-bold text-peanut">Complete Your Order</h3>
-                        <p class="text-xs text-peanut-muted font-bold">Step 1 of 2 • Fast Checkout</p>
-                    </div>
-                </div>
-
-                <!-- Order Summary Box -->
-                <div class="bg-white p-4 rounded-2xl border-2 border-peanut/30 mb-6 space-y-2">
-                    <div class="flex justify-between font-bold text-peanut text-sm">
-                        <span>Selected Plan:</span>
-                        <span id="checkoutPlanName" class="text-coral">The Nut Head</span>
-                    </div>
-                    <div class="flex justify-between text-xs text-peanut-muted font-semibold">
-                        <span>Billing Cycle:</span>
-                        <span id="checkoutBillingCycle">Monthly</span>
-                    </div>
-                    <div class="flex justify-between text-xs text-peanut-muted font-semibold">
-                        <span>Shipping:</span>
-                        <span class="text-emerald-700 font-bold">FREE (USA)</span>
-                    </div>
-                    <div class="pt-2 border-t border-sand-border flex justify-between font-display font-extrabold text-peanut text-lg">
-                        <span>Total Due Today:</span>
-                        <span id="checkoutTotalPrice" class="text-coral">$29.99</span>
-                    </div>
-                </div>
-
-                <!-- Checkout Form Fields -->
-                <form id="checkoutForm" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-bold text-peanut uppercase mb-1">Full Name</label>
-                        <input type="text" required placeholder="Jane Doe" class="w-full bg-white border-2 border-peanut/30 p-3 rounded-xl font-medium text-sm focus:outline-none focus:border-coral">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-peanut uppercase mb-1">Shipping Address</label>
-                        <input type="text" required placeholder="123 Snack Avenue, Apt 4B" class="w-full bg-white border-2 border-peanut/30 p-3 rounded-xl font-medium text-sm focus:outline-none focus:border-coral">
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-bold text-peanut uppercase mb-1">Promo Code</label>
-                            <input type="text" id="checkoutPromoInput" placeholder="NUTTY5" class="w-full bg-white border-2 border-peanut/30 p-3 rounded-xl font-medium text-sm focus:outline-none focus:border-coral uppercase">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-peanut uppercase mb-1">Payment Method</label>
-                            <select class="w-full bg-white border-2 border-peanut/30 p-3 rounded-xl font-medium text-sm focus:outline-none focus:border-coral">
-                                <option>💳 Credit / Debit Card</option>
-                                <option>📱 Apple Pay</option>
-                                <option>💛 PayPal</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="w-full mt-4 bg-coral hover:bg-coral-dark text-white font-display font-bold py-4 rounded-xl border-2 border-peanut shadow-button-coral text-lg active:translate-y-1">
-                        Confirm & Subscribe Now 🎉
-                    </button>
-                </form>
-            </div>
-
-            <!-- Checkout Success State -->
-            <div id="checkoutSuccessStep" class="hidden text-center py-8 space-y-4">
-                <div class="w-20 h-20 bg-sunshine rounded-full border-2 border-peanut flex items-center justify-center text-4xl mx-auto animate-bounce-soft">
-                    🎉
-                </div>
-                <h3 class="font-display text-3xl font-extrabold text-peanut">Welcome To PeanutCrate!</h3>
-                <p class="text-peanut-light text-sm max-w-sm mx-auto font-medium">
-                    Your subscription is confirmed! We're already packing your freshly roasted treats. Check your inbox for tracking updates.
-                </p>
-                <div class="bg-white p-4 rounded-xl border border-peanut/20 font-mono text-xs text-peanut">
-                    Order ID: #PC-2026-9821
-                </div>
-                <button onclick="closeCheckoutModal()" class="bg-peanut text-white font-display font-bold px-8 py-3 rounded-xl border-2 border-peanut shadow-md">
-                    Back To Home
-                </button>
-            </div>
-
-        </div>
+    <div class="bg-actions">
+      <button id="bgBtn" class="glass-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="3" />
+          <circle cx="8.5" cy="8.5" r="1.6" />
+          <path d="M21 15l-5-5L5 21" />
+        </svg>
+        Upload Custom Background
+      </button>
+      <input id="bgFile" type="file" accept="image/*" style="display: none" />
     </div>
 
-    <script>
-        const snackData = [
-            {
-                id: 1,
-                name: "Honey Roasted Espresso Peanuts",
-                category: "sweet",
-                emoji: "☕",
-                badge: "Bestseller",
-                desc: "Slow roasted Virginia peanuts coated in wild organic honey and dusted with finely ground dark espresso beans.",
-                flavor: "Sweet & Coffee Crunch",
-                weight: "7.0 oz (198g)",
-                glutenFree: "Yes"
-            },
-            {
-                id: 2,
-                name: "Chipotle Lime Roasted Peanuts",
-                category: "spicy",
-                emoji: "🌶️",
-                badge: "Spicy",
-                desc: "Bold smoky chipotle chili pepper infused with fresh squeezed lime juice and sea salt flakes.",
-                flavor: "Zesty & Smoky Heat",
-                weight: "6.5 oz (184g)",
-                glutenFree: "Yes"
-            },
-            {
-                id: 3,
-                name: "Stone-Ground Maple Butter Jar",
-                category: "spread",
-                emoji: "🧈",
-                badge: "Artisanal Jar",
-                desc: "100% single-origin roasted peanuts blended ultra-smooth with pure Vermont maple syrup.",
-                flavor: "Rich Maple Sweetness",
-                weight: "8.0 oz (226g)",
-                glutenFree: "Yes"
-            },
-            {
-                id: 4,
-                name: "Dark Chocolate Peanut Cluster",
-                category: "sweet",
-                emoji: "🍫",
-                badge: "Decadent",
-                desc: "Crunchy salted peanuts smothered in 70% fair-trade Belgian dark chocolate with sea salt sprinkled on top.",
-                flavor: "Rich Dark Chocolate",
-                weight: "5.5 oz (155g)",
-                glutenFree: "Yes"
-            },
-            {
-                id: 5,
-                name: "Sriracha Garlic Peanut Crunch",
-                category: "spicy",
-                emoji: "🧄",
-                badge: "Hot Craving",
-                desc: "Extra crunchy double-baked peanuts seasoned with red garlic sriracha and toasted sesame seeds.",
-                flavor: "Garlic Spicy Tang",
-                weight: "6.5 oz (184g)",
-                glutenFree: "Yes"
-            },
-            {
-                id: 6,
-                name: "Salted Caramel Peanut Brittle",
-                category: "sweet",
-                emoji: "🍯",
-                badge: "Classic Treat",
-                desc: "Old-fashioned butter brittle loaded with extra peanuts and finished with sea salt caramel flakes.",
-                flavor: "Caramel Crunch",
-                weight: "6.0 oz (170g)",
-                glutenFree: "No"
-            },
-            {
-                id: 7,
-                name: "Smoky BBQ Mesquite Peanuts",
-                category: "spicy",
-                emoji: "🍖",
-                badge: "Savory",
-                desc: "Slow roasted over real mesquite wood chips and tossed in rich hickory barbecue dry rub.",
-                flavor: "Smoky Hickory BBQ",
-                weight: "7.0 oz (198g)",
-                glutenFree: "Yes"
-            },
-            {
-                id: 8,
-                name: "Cinnamon Sugar Cookie Butter Jar",
-                category: "spread",
-                emoji: "🍪",
-                badge: "Artisanal Jar",
-                desc: "Creamy peanut spread infused with snickerdoodle spices, brown sugar, and real vanilla bean.",
-                flavor: "Warm Cinnamon Vanilla",
-                weight: "8.0 oz (226g)",
-                glutenFree: "Yes"
+    <div class="slider-head">
+      <span class="t">Card liquidness</span>
+      <span class="v" id="whitenessVal">0%</span>
+    </div>
+    <input id="whiteSlider" type="range" min="0" max="100" value="0" />
+
+    <button id="downloadBtn" class="download-btn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#101c2e" stroke-width="2.4"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v12" />
+        <path d="M6 11l6 6 6-6" />
+        <path d="M4 21h16" />
+      </svg>
+      Download Card
+    </button>
+    <p id="status"></p>
+  </div>
+
+  <!-- ============ GITHUB GLASS CARD ============ -->
+  <div id="card">
+    <div class="drag-hint">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3" />
+      </svg>
+      drag me
+    </div>
+
+    <div class="avatar-wrap" data-dl="avatar">
+      <img id="avatarImg" crossorigin="anonymous" src="https://avatars.githubusercontent.com/u/583231?v=4" alt="avatar"
+        draggable="false" />
+    </div>
+    <h2 id="nameText" data-dl="text">The Octocat</h2>
+    <div class="login" id="loginText" data-dl="text">@octocat</div>
+    <p class="desc" id="descText" data-dl="text">
+      Type a GitHub username to build your liquid-glass profile card.
+    </p>
+
+    <div class="stats">
+      <div class="stat" data-dl="panel">
+        <div class="num" id="repoNum" data-dl="text">8</div>
+        <div class="lbl" data-dl="text">Repos</div>
+      </div>
+      <div class="stat" data-dl="panel">
+        <div class="num" id="followerNum" data-dl="text">9.8k</div>
+        <div class="lbl" data-dl="text">Followers</div>
+      </div>
+      <div class="stat" data-dl="panel">
+        <div class="num" id="followingNum" data-dl="text">9</div>
+        <div class="lbl" data-dl="text">Following</div>
+      </div>
+    </div>
+
+    <div class="panel-box" data-dl="panel">
+      <div class="panel-head">
+        <span class="t" data-dl="text">Contributions</span>
+        <span class="y" id="contribYearText" data-dl="text"></span>
+      </div>
+      <canvas id="contribCanvas" data-dl="canvas"></canvas>
+    </div>
+
+    <div class="panel-box" data-dl="panel" style="margin-bottom: 0">
+      <div class="sig-head">
+        <span class="t" data-dl="text">SIGNATURE</span>
+        <button class="clear-pill" id="sigClear" data-dl="panel">
+          <span data-dl="text">Clear</span>
+        </button>
+      </div>
+      <div class="sig-area">
+        <canvas id="sigCanvas" data-dl="canvas"></canvas>
+        <div id="sigPlaceholder">sign here &#9998;</div>
+      </div>
+      <div class="sig-line" data-dl="hr"></div>
+    </div>
+
+    <div class="card-meta">
+      <div class="meta-tile" data-dl="panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M12 21s-7-5.6-7-11a7 7 0 1 1 14 0c0 5.4-7 11-7 11z" />
+          <circle cx="12" cy="10" r="2.6" />
+        </svg>
+        <span id="locationText" data-dl="text">San Francisco</span>
+      </div>
+      <div class="meta-tile" data-dl="panel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="3" />
+          <path d="M16 2v4M8 2v4M3 10h18" />
+        </svg>
+        <span id="joinedText" data-dl="text">Joined 2011</span>
+      </div>
+    </div>
+  </div>
+
+  <p class="built-credit">
+    Liquid Glass Engine &bull; Built with WebGL
+  </p>
+
+  <!-- ============ LIQUID GLASS SHADER ============ -->
+  <script id="fragShader" type="x-shader/x-fragment">
+      precision mediump float;
+
+      uniform vec3 iResolution;
+      uniform vec2 uImgRes;
+      uniform vec2 uCardPos;   // card centre in gl pixels (y up)
+      uniform vec2 uCardHalf;  // half width / half height in pixels
+      uniform float uWhite;    // 0..1 whiteness
+      uniform sampler2D iChannel0;
+
+      vec2 coverUv(vec2 uv) {
+        float ca = iResolution.x / iResolution.y;
+        float ia = uImgRes.x / uImgRes.y;
+        vec2 s = ca > ia ? vec2(1.0, ia / ca) : vec2(ca / ia, 1.0);
+        return (uv - 0.5) * s + 0.5;
+      }
+
+      void main() {
+        const float POWER_EXPONENT = 6.0;
+        vec2 fragCoord = gl_FragCoord.xy;
+        vec2 uv = fragCoord / iResolution.xy;
+
+        vec2 d = (fragCoord - uCardPos) / uCardHalf;
+        float roundedBox = pow(abs(d.x), POWER_EXPONENT) + pow(abs(d.y), POWER_EXPONENT);
+
+        float rb1 = clamp((1.0 - roundedBox) * 8.0, 0.0, 1.0);
+        float rb2 = clamp((0.955 - roundedBox * 0.95) * 16.0, 0.0, 1.0) -
+                    clamp((0.91  - roundedBox * 0.95) * 16.0, 0.0, 1.0);
+        float rb3 = clamp((1.5 - roundedBox * 1.1) * 2.0, 0.0, 1.0) -
+                    clamp((1.0 - roundedBox * 1.1) * 2.0, 0.0, 1.0);
+
+        vec4 bg = texture2D(iChannel0, coverUv(uv));
+        float transition = smoothstep(0.0, 1.0, rb1 + rb2);
+        vec4 color = bg;
+
+        if (transition > 0.0) {
+          vec2 cuv = uCardPos / iResolution.xy;
+          vec2 lens = cuv + (uv - cuv) * (1.0 - roundedBox * 0.22);
+
+          vec4 acc = vec4(0.0);
+          float total = 0.0;
+          for (float x = -4.0; x <= 4.0; x++) {
+            for (float y = -4.0; y <= 4.0; y++) {
+              vec2 off = vec2(x, y) * 1.25 / iResolution.xy;
+              acc += texture2D(iChannel0, coverUv(lens + off));
+              total += 1.0;
             }
-        ];
+          }
+          acc /= total;
 
-        function renderSnacks(filter = 'all') {
-            const grid = document.getElementById('snackGrid');
-            grid.innerHTML = '';
+          float dy = uv.y - cuv.y;
+          float gradient = clamp((clamp(dy, 0.0, 0.22) + 0.1) / 2.0, 0.0, 1.0) +
+                           clamp((clamp(-dy, -1000.0, 0.22) * rb3 + 0.1) / 2.0, 0.0, 1.0);
+          vec4 lighting = clamp(acc + vec4(rb1) * gradient + vec4(rb2) * 0.35, 0.0, 1.0);
 
-            const filtered = filter === 'all' ? snackData : snackData.filter(s => s.category === filter);
-
-            filtered.forEach(snack => {
-                const card = document.createElement('div');
-                card.className = "snack-card bg-white border-2 border-peanut rounded-2xl p-5 shadow-card-playful hover:shadow-playful hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between cursor-pointer group";
-                card.onclick = () => openSnackModal(snack.id);
-
-                card.innerHTML = `
-                    <div>
-                        <div class="relative bg-sand-card rounded-xl p-4 flex items-center justify-center text-4xl mb-3 border border-peanut/10 group-hover:bg-sunshine-light transition-colors">
-                            <span>${snack.emoji}</span>
-                            <span class="absolute top-2 right-2 bg-coral text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">${snack.badge}</span>
-                        </div>
-                        <h4 class="font-display font-bold text-peanut text-lg leading-tight mb-1 group-hover:text-coral transition-colors">${snack.name}</h4>
-                        <p class="text-xs text-peanut-muted line-clamp-2 font-medium">${snack.desc}</p>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-sand-border flex items-center justify-between text-xs font-bold text-peanut">
-                        <span>${snack.flavor}</span>
-                        <span class="text-coral underline">Details <i class="fa-solid fa-chevron-right text-[10px]"></i></span>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
+          lighting = mix(lighting, vec4(1.0), uWhite * 0.97);
+          color = mix(bg, lighting, transition);
         }
-
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.filter-btn').forEach(b => {
-                    b.classList.remove('bg-peanut', 'text-white');
-                    b.classList.add('bg-white', 'text-peanut');
-                });
-                e.target.classList.remove('bg-white', 'text-peanut');
-                e.target.classList.add('bg-peanut', 'text-white');
-
-                renderSnacks(e.target.dataset.filter);
-            });
-        });
-
-        function openSnackModal(id) {
-            const snack = snackData.find(s => s.id === id);
-            if (!snack) return;
-
-            document.getElementById('modalEmoji').innerText = snack.emoji;
-            document.getElementById('modalTitle').innerText = snack.name;
-            document.getElementById('modalBadge').innerText = snack.badge;
-            document.getElementById('modalDesc').innerText = snack.desc;
-            document.getElementById('modalFlavor').innerText = snack.flavor;
-            document.getElementById('modalWeight').innerText = snack.weight;
-            document.getElementById('modalGluten').innerText = snack.glutenFree;
-
-            document.getElementById('snackModal').classList.remove('hidden');
-        }
-
-        function closeSnackModal() {
-            document.getElementById('snackModal').classList.add('hidden');
-        }
-
-        let isAnnual = false;
-        const toggleBtn = document.getElementById('billingToggle');
-        const circle = document.getElementById('toggleCircle');
-
-        toggleBtn.addEventListener('click', () => {
-            isAnnual = !isAnnual;
-            if (isAnnual) {
-                circle.style.transform = 'translateX(28px)';
-                toggleBtn.classList.add('bg-sunshine-light');
-                document.getElementById('annualLabel').classList.remove('text-peanut-muted');
-                document.getElementById('annualLabel').classList.add('text-peanut');
-                document.getElementById('monthlyLabel').classList.add('text-peanut-muted');
-            } else {
-                circle.style.transform = 'translateX(0px)';
-                toggleBtn.classList.remove('bg-sunshine-light');
-                document.getElementById('annualLabel').classList.add('text-peanut-muted');
-                document.getElementById('monthlyLabel').classList.remove('text-peanut-muted');
-            }
-
-            // Update Prices
-            document.querySelectorAll('.price-val').forEach(el => {
-                const val = isAnnual ? el.dataset.annual : el.dataset.monthly;
-                el.innerText = '$' + val;
-            });
-
-            document.querySelectorAll('.billing-desc').forEach(el => {
-                el.innerText = isAnnual ? 'Billed annually (Save 20%)' : 'Billed monthly';
-            });
-        });
-
-        let quizAnswers = {};
-
-        function selectQuizAnswer(step, answer) {
-            quizAnswers[step] = answer;
-
-            if (step === 1) {
-                document.getElementById('quizStep1').classList.add('hidden');
-                document.getElementById('quizStep2').classList.remove('hidden');
-                document.getElementById('quizStepLabel').innerText = 'Question 2 of 3';
-                document.getElementById('quizPercent').innerText = '66% Completed';
-                document.getElementById('quizProgressBar').style.width = '66%';
-            } else if (step === 2) {
-                document.getElementById('quizStep2').classList.add('hidden');
-                document.getElementById('quizStep3').classList.remove('hidden');
-                document.getElementById('quizStepLabel').innerText = 'Question 3 of 3';
-                document.getElementById('quizPercent').innerText = '100% Completed';
-                document.getElementById('quizProgressBar').style.width = '100%';
-            } else if (step === 3) {
-                document.getElementById('quizStep3').classList.add('hidden');
-                showQuizResults();
-            }
-        }
-
-        function showQuizResults() {
-            const resultDiv = document.getElementById('quizResult');
-            resultDiv.classList.remove('hidden');
-
-            const title = document.getElementById('resultPlanTitle');
-            const desc = document.getElementById('resultPlanDesc');
-            const boxType = document.getElementById('resultBoxType');
-
-            if (quizAnswers[3] === 'Yes Spreads' || quizAnswers[2] === 'Daily') {
-                title.innerText = "The 'Nut Head' Plan";
-                desc.innerText = "Since you love artisanal variety and daily snacking, our popular 8-snack crate with 1 bonus spread jar is your absolute dream setup!";
-                boxType.innerText = "8 Craft Snacks + 1 Spread Jar";
-            } else if (quizAnswers[2] === 'Family') {
-                title.innerText = "The 'Ultimate Peanut Lover' Plan";
-                desc.innerText = "With family snacking in mind, our XL 12-snack crate with 2 bonus artisan spreads guarantees everyone gets their favorite crunch!";
-                boxType.innerText = "12 Craft Snacks + 2 Spreads + Merch";
-            } else {
-                title.innerText = "The 'Nibbler' Plan";
-                desc.innerText = "Your preferences match perfectly with our light 4-snack intro box—zero waste and 100% craveable goodness!";
-                boxType.innerText = "4 Full-Size Craft Snacks";
-            }
-        }
-
-        function resetQuiz() {
-            quizAnswers = {};
-            document.getElementById('quizResult').classList.add('hidden');
-            document.getElementById('quizStep1').classList.remove('hidden');
-            document.getElementById('quizStepLabel').innerText = 'Question 1 of 3';
-            document.getElementById('quizPercent').innerText = '33% Completed';
-            document.getElementById('quizProgressBar').style.width = '33%';
-        }
-
-        function triggerCheckoutFromQuiz() {
-            let planName = "The Nut Head";
-            let price = 29.99;
-            if (quizAnswers[2] === 'Family') {
-                planName = "Ultimate Peanut Lover";
-                price = 44.99;
-            } else if (quizAnswers[2] === 'Occasional' && quizAnswers[3] !== 'Yes Spreads') {
-                planName = "The Nibbler";
-                price = 19.99;
-            }
-            selectPlan(planName, price);
-        }
-
-        function selectPlan(planName, basePrice) {
-            const finalPrice = isAnnual ? (basePrice * 0.8).toFixed(2) : basePrice.toFixed(2);
-            document.getElementById('checkoutPlanName').innerText = planName;
-            document.getElementById('checkoutBillingCycle').innerText = isAnnual ? 'Annual Billing (Save 20%)' : 'Monthly Billing';
-            document.getElementById('checkoutTotalPrice').innerText = '$' + finalPrice;
-
-            document.getElementById('checkoutFormStep').classList.remove('hidden');
-            document.getElementById('checkoutSuccessStep').classList.add('hidden');
-            document.getElementById('checkoutModal').classList.remove('hidden');
-        }
-
-        function closeCheckoutModal() {
-            document.getElementById('checkoutModal').classList.add('hidden');
-        }
-
-        document.getElementById('checkoutForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            document.getElementById('checkoutFormStep').classList.add('hidden');
-            document.getElementById('checkoutSuccessStep').classList.remove('hidden');
-        });
-
-        document.querySelectorAll('.faq-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const answer = btn.nextElementSibling;
-                const icon = btn.querySelector('i');
-
-                if (answer.classList.contains('hidden')) {
-                    answer.classList.remove('hidden');
-                    icon.classList.remove('fa-plus');
-                    icon.classList.add('fa-minus');
-                } else {
-                    answer.classList.add('hidden');
-                    icon.classList.remove('fa-minus');
-                    icon.classList.add('fa-plus');
-                }
-            });
-        });
-
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        document.querySelectorAll('.mobile-link').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
-            });
-        });
-
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 20) {
-                navbar.classList.add('glass-nav', 'border-peanut/20', 'shadow-sm');
-            } else {
-                navbar.classList.remove('glass-nav', 'border-peanut/20', 'shadow-sm');
-            }
-        });
-
-        document.getElementById('newsletterForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            document.getElementById('newsletterSuccess').classList.remove('hidden');
-            document.getElementById('newsletterEmail').value = '';
-        });
-
-        window.onload = function() {
-            renderSnacks('all');
-        }
+        gl_FragColor = vec4(color.rgb, 1.0);
+      }
     </script>
+
+  <script>
+    /* =================== WebGL setup =================== */
+    const canvas = document.getElementById("glcanvas");
+    const gl = canvas.getContext("webgl", { preserveDrawingBuffer: true, alpha: false });
+    const img = document.getElementById("srcImage");
+    const card = document.getElementById("card");
+
+    function setCanvasSize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    setCanvasSize();
+
+    const vsSource = `attribute vec2 position; void main(){ gl_Position = vec4(position, 0.0, 1.0); }`;
+    const fsSource = document.getElementById("fragShader").textContent;
+
+    function createShader(type, source) {
+      const sh = gl.createShader(type);
+      gl.shaderSource(sh, source);
+      gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+        console.error("Shader error:", gl.getShaderInfoLog(sh));
+        gl.deleteShader(sh);
+        return null;
+      }
+      return sh;
+    }
+    const program = gl.createProgram();
+    gl.attachShader(program, createShader(gl.VERTEX_SHADER, vsSource));
+    gl.attachShader(program, createShader(gl.FRAGMENT_SHADER, fsSource));
+    gl.linkProgram(program);
+    gl.useProgram(program);
+
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]),
+      gl.STATIC_DRAW,
+    );
+    const positionLoc = gl.getAttribLocation(program, "position");
+    gl.enableVertexAttribArray(positionLoc);
+    gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+
+    const U = {
+      resolution: gl.getUniformLocation(program, "iResolution"),
+      imgRes: gl.getUniformLocation(program, "uImgRes"),
+      cardPos: gl.getUniformLocation(program, "uCardPos"),
+      cardHalf: gl.getUniformLocation(program, "uCardHalf"),
+      white: gl.getUniformLocation(program, "uWhite"),
+      texture: gl.getUniformLocation(program, "iChannel0"),
+    };
+
+    const texture = gl.createTexture();
+    let imgW = 1600,
+      imgH = 1000;
+
+    function uploadTexture(source, w, h) {
+      imgW = w;
+      imgH = h;
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+      gl.texImage2D(
+        gl.TEXTURE_2D,
+        0,
+        gl.RGBA,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
+        source,
+      );
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    }
+
+    /* Procedural Presets: Meadow, Cosmic, Sunset, Aurora */
+    function createMeadowCanvas() {
+      const c = document.createElement("canvas");
+      c.width = 1600;
+      c.height = 1000;
+      const x = c.getContext("2d");
+      const g = x.createLinearGradient(0, 0, 0, 1000);
+      g.addColorStop(0, "#4895ef");
+      g.addColorStop(0.5, "#70b8f0");
+      g.addColorStop(1, "#a8dadc");
+      x.fillStyle = g;
+      x.fillRect(0, 0, 1600, 1000);
+
+      // Gentle sun glow
+      const sun = x.createRadialGradient(1200, 200, 20, 1200, 200, 400);
+      sun.addColorStop(0, "rgba(255, 255, 230, 0.45)");
+      sun.addColorStop(1, "rgba(255, 255, 255, 0)");
+      x.fillStyle = sun;
+      x.fillRect(0, 0, 1600, 1000);
+
+      const petals = ["#ffffff", "#ff4d6d", "#ff758f", "#ff85a1", "#ffd166", "#f72585", "#ffb703"];
+      function flower(cx, cy, r, col) {
+        for (let i = 0; i < 8; i++) {
+          const a = (i / 8) * Math.PI * 2;
+          x.save();
+          x.translate(cx + Math.cos(a) * r * 0.8, cy + Math.sin(a) * r * 0.8);
+          x.rotate(a);
+          x.fillStyle = col;
+          x.beginPath();
+          x.ellipse(0, 0, r * 0.75, r * 0.4, 0, 0, Math.PI * 2);
+          x.fill();
+          x.restore();
+        }
+        x.fillStyle = "#ffd166";
+        x.beginPath();
+        x.arc(cx, cy, r * 0.35, 0, Math.PI * 2);
+        x.fill();
+      }
+
+      // Stems & blades of grass
+      x.strokeStyle = "#2b7a4b";
+      x.lineWidth = 8;
+      for (let i = 0; i < 35; i++) {
+        const sx = (i / 35) * 1650 + (Math.sin(i * 1.5) * 40);
+        const sy = 680 + Math.cos(i) * 160;
+        x.beginPath();
+        x.moveTo(sx, sy + 350);
+        x.quadraticCurveTo(sx + (i % 2 === 0 ? 50 : -50), sy + 180, sx, sy);
+        x.stroke();
+      }
+      for (let i = 0; i < 45; i++) {
+        const fx = (i * 37) % 1600;
+        const fy = 500 + ((i * 47) % 450);
+        flower(fx, fy, 28 + ((i * 11) % 40), petals[i % petals.length]);
+      }
+      return c;
+    }
+
+    function createCosmicCanvas() {
+      const c = document.createElement("canvas");
+      c.width = 1600;
+      c.height = 1000;
+      const x = c.getContext("2d");
+      const g = x.createRadialGradient(800, 500, 100, 800, 500, 900);
+      g.addColorStop(0, "#2c0b4d");
+      g.addColorStop(0.5, "#120324");
+      g.addColorStop(1, "#05010a");
+      x.fillStyle = g;
+      x.fillRect(0, 0, 1600, 1000);
+
+      // Glowing nebula swirls
+      function nebulaOrb(cx, cy, r, color) {
+        const rad = x.createRadialGradient(cx, cy, 0, cx, cy, r);
+        rad.addColorStop(0, color);
+        rad.addColorStop(1, "rgba(0,0,0,0)");
+        x.fillStyle = rad;
+        x.beginPath();
+        x.arc(cx, cy, r, 0, Math.PI * 2);
+        x.fill();
+      }
+      nebulaOrb(450, 350, 480, "rgba(180, 40, 240, 0.4)");
+      nebulaOrb(1100, 400, 500, "rgba(0, 200, 255, 0.35)");
+      nebulaOrb(800, 750, 450, "rgba(255, 60, 150, 0.3)");
+      nebulaOrb(1300, 750, 350, "rgba(120, 50, 255, 0.28)");
+
+      // Star dust
+      for (let i = 0; i < 300; i++) {
+        const sx = Math.random() * 1600;
+        const sy = Math.random() * 1000;
+        const sz = Math.random() * 2.5 + 0.5;
+        x.fillStyle = Math.random() > 0.3 ? "#ffffff" : "#f1c40f";
+        x.globalAlpha = Math.random() * 0.8 + 0.2;
+        x.beginPath();
+        x.arc(sx, sy, sz, 0, Math.PI * 2);
+        x.fill();
+      }
+      x.globalAlpha = 1.0;
+      return c;
+    }
+
+    function createSunsetCanvas() {
+      const c = document.createElement("canvas");
+      c.width = 1600;
+      c.height = 1000;
+      const x = c.getContext("2d");
+      const g = x.createLinearGradient(0, 0, 0, 1000);
+      g.addColorStop(0, "#0f172a");
+      g.addColorStop(0.35, "#7c2d12");
+      g.addColorStop(0.65, "#c2410c");
+      g.addColorStop(0.85, "#ea580c");
+      g.addColorStop(1, "#f97316");
+      x.fillStyle = g;
+      x.fillRect(0, 0, 1600, 1000);
+
+      // Giant sun
+      const sun = x.createRadialGradient(800, 680, 20, 800, 680, 380);
+      sun.addColorStop(0, "rgba(255, 245, 200, 0.95)");
+      sun.addColorStop(0.3, "rgba(255, 200, 80, 0.8)");
+      sun.addColorStop(0.7, "rgba(255, 90, 95, 0.4)");
+      sun.addColorStop(1, "rgba(255, 50, 100, 0)");
+      x.fillStyle = sun;
+      x.beginPath();
+      x.arc(800, 680, 380, 0, Math.PI * 2);
+      x.fill();
+
+      // Sunset horizon waves
+      x.fillStyle = "rgba(15, 23, 42, 0.85)";
+      x.beginPath();
+      x.moveTo(0, 780);
+      x.bezierCurveTo(400, 740, 900, 830, 1600, 770);
+      x.lineTo(1600, 1000);
+      x.lineTo(0, 1000);
+      x.fill();
+
+      return c;
+    }
+
+    function createAuroraCanvas() {
+      const c = document.createElement("canvas");
+      c.width = 1600;
+      c.height = 1000;
+      const x = c.getContext("2d");
+      const g = x.createLinearGradient(0, 0, 0, 1000);
+      g.addColorStop(0, "#030a16");
+      g.addColorStop(0.6, "#06182c");
+      g.addColorStop(1, "#030811");
+      x.fillStyle = g;
+      x.fillRect(0, 0, 1600, 1000);
+
+      // Ribbon aurora bands
+      function auroraBand(points, col1, col2) {
+        x.save();
+        x.filter = "blur(30px)";
+        const grad = x.createLinearGradient(0, 200, 1600, 600);
+        grad.addColorStop(0, col1);
+        grad.addColorStop(1, col2);
+        x.strokeStyle = grad;
+        x.lineWidth = 120;
+        x.beginPath();
+        x.moveTo(points[0][0], points[0][1]);
+        for (let i = 1; i < points.length; i++) {
+          x.lineTo(points[i][0], points[i][1]);
+        }
+        x.stroke();
+        x.restore();
+      }
+
+      auroraBand([[-100, 450], [400, 250], [900, 400], [1300, 200], [1700, 350]], "rgba(56, 239, 125, 0.55)", "rgba(17, 153, 142, 0.4)");
+      auroraBand([[-100, 350], [300, 480], [800, 220], [1200, 450], [1700, 260]], "rgba(0, 210, 255, 0.45)", "rgba(58, 123, 213, 0.4)");
+
+      // Mountain silhouettes
+      x.fillStyle = "#040d18";
+      x.beginPath();
+      x.moveTo(0, 850);
+      x.lineTo(250, 720);
+      x.lineTo(500, 840);
+      x.lineTo(820, 670);
+      x.lineTo(1100, 810);
+      x.lineTo(1350, 700);
+      x.lineTo(1600, 830);
+      x.lineTo(1600, 1000);
+      x.lineTo(0, 1000);
+      x.fill();
+
+      return c;
+    }
+
+    /* Active background state */
+    let currentBgCanvas = createMeadowCanvas();
+    uploadTexture(currentBgCanvas, currentBgCanvas.width, currentBgCanvas.height);
+
+    function setPreset(type, el) {
+      document.querySelectorAll(".preset-thumb").forEach(t => t.classList.remove("active"));
+      if (el) el.classList.add("active");
+      if (type === "meadow") currentBgCanvas = createMeadowCanvas();
+      else if (type === "cosmic") currentBgCanvas = createCosmicCanvas();
+      else if (type === "sunset") currentBgCanvas = createSunsetCanvas();
+      else if (type === "aurora") currentBgCanvas = createAuroraCanvas();
+      uploadTexture(currentBgCanvas, currentBgCanvas.width, currentBgCanvas.height);
+    }
+
+    document.getElementById("presetFlowers").addEventListener("click", function () { setPreset("meadow", this); });
+    document.getElementById("presetCosmic").addEventListener("click", function () { setPreset("cosmic", this); });
+    document.getElementById("presetSunset").addEventListener("click", function () { setPreset("sunset", this); });
+    document.getElementById("presetAurora").addEventListener("click", function () { setPreset("aurora", this); });
+
+    // Try loading the bubbbly online webp asset asynchronously if reachable
+    function loadRemoteBackground(url) {
+      const testImg = new Image();
+      testImg.crossOrigin = "anonymous";
+      testImg.onload = () => {
+        try {
+          uploadTexture(testImg, testImg.naturalWidth, testImg.naturalHeight);
+          currentBgCanvas = testImg;
+        } catch (e) {
+          // fallback stays active
+        }
+      };
+      testImg.src = url;
+    }
+    loadRemoteBackground("https://www.bubbbly.com/assets/02386bb9-ef66-4f7b-a67.webp");
+
+    /* =================== Whiteness / ink colour =================== */
+    const MAX_WHITE = 0.22;
+    let whiteness = 0;
+    let inkRGB = [255, 255, 255];
+
+    function applyWhiteness(sliderFrac) {
+      whiteness = sliderFrac * MAX_WHITE;
+      document.getElementById("whitenessVal").textContent = Math.round(sliderFrac * 100) + "%";
+      card.style.setProperty("--ink", `rgb(${inkRGB.join(",")})`);
+      card.style.setProperty("--ink-rgb", inkRGB.join(","));
+      drawContrib();
+      redrawSignature();
+    }
+    document
+      .getElementById("whiteSlider")
+      .addEventListener("input", (e) => applyWhiteness(e.target.value / 100));
+
+    /* =================== Contribution graph =================== */
+    const contribCanvas = document.getElementById("contribCanvas");
+    const contribYearText = document.getElementById("contribYearText");
+    const ROWS = 7;
+    const greenShades = ["#9be9a8", "#40c463", "#30a14e", "#216e39"];
+    let contribCells = [];
+    let contribYear = new Date().getFullYear();
+    let totalContrib = 0;
+
+    function buildRealisticDummyContributions() {
+      const year = new Date().getFullYear();
+      const days = [];
+      const start = new Date(year, 0, 1);
+      const end = new Date(year, 11, 31);
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        const r = Math.random();
+        let level = 0;
+        if (r > 0.65) level = 1;
+        if (r > 0.8) level = 2;
+        if (r > 0.9) level = 3;
+        if (r > 0.96) level = 4;
+        days.push({
+          date: d.toISOString().split("T")[0],
+          count: level * 2,
+          level,
+        });
+      }
+      return days;
+    }
+
+    function toCells(days) {
+      if (!days || days.length === 0) return [];
+      const sorted = [...days].sort(
+        (a, b) => new Date(a.date) - new Date(b.date),
+      );
+      const firstDow = new Date(sorted[0].date).getDay();
+      const cells = [];
+      for (let i = 0; i < firstDow; i++) cells.push(null);
+      sorted.forEach((d) => cells.push(d));
+      return cells;
+    }
+
+    function updateContribLabel() {
+      contribYearText.textContent =
+        totalContrib > 0
+          ? fmt(totalContrib) + " this year"
+          : String(contribYear);
+    }
+
+    function setContributions(days, year) {
+      contribCells = toCells(days);
+      contribYear = year;
+      totalContrib = days.reduce((s, d) => s + (d.count || 0), 0);
+      updateContribLabel();
+      drawContrib();
+    }
+
+    function drawContrib() {
+      const w = contribCanvas.clientWidth,
+        h = contribCanvas.clientHeight;
+      if (!w || !h) return;
+      const dpr = window.devicePixelRatio || 2;
+      contribCanvas.width = w * dpr;
+      contribCanvas.height = h * dpr;
+      const x = contribCanvas.getContext("2d");
+      x.setTransform(dpr, 0, 0, dpr, 0, 0);
+      x.clearRect(0, 0, w, h);
+      if (!contribCells.length) return;
+
+      const cols = Math.ceil(contribCells.length / ROWS);
+      const cellW = w / cols;
+      const rowGap = h / ROWS;
+      const radius = Math.min(cellW, rowGap) * 0.32;
+
+      for (let i = 0; i < contribCells.length; i++) {
+        const cell = contribCells[i];
+        if (!cell) continue;
+        const col = Math.floor(i / ROWS);
+        const row = i % ROWS;
+        const lv = cell.level || 0;
+        x.fillStyle =
+          lv === 0
+            ? `rgba(${inkRGB.join(",")},0.22)`
+            : greenShades[lv - 1] || greenShades[0];
+        x.beginPath();
+        x.arc(
+          col * cellW + cellW / 2,
+          row * rowGap + rowGap / 2,
+          radius,
+          0,
+          Math.PI * 2,
+        );
+        x.fill();
+      }
+    }
+
+    /* =================== Signature pad =================== */
+    const sigCanvas = document.getElementById("sigCanvas");
+    const sigPlaceholder = document.getElementById("sigPlaceholder");
+    let strokes = [],
+      curStroke = null;
+
+    function sizeSig() {
+      const w = sigCanvas.clientWidth,
+        h = sigCanvas.clientHeight;
+      if (!w || !h) return;
+      const dpr = window.devicePixelRatio || 2;
+      sigCanvas.width = w * dpr;
+      sigCanvas.height = h * dpr;
+      redrawSignature();
+    }
+
+    function redrawSignature() {
+      const dpr = window.devicePixelRatio || 2;
+      const x = sigCanvas.getContext("2d");
+      x.setTransform(dpr, 0, 0, dpr, 0, 0);
+      x.clearRect(0, 0, sigCanvas.clientWidth, sigCanvas.clientHeight);
+      x.strokeStyle = `rgba(${inkRGB.join(",")}, 0.95)`;
+      x.lineWidth = 2.4;
+      x.lineCap = "round";
+      x.lineJoin = "round";
+      for (const s of strokes) {
+        if (s.length < 2) {
+          if (s.length === 1) {
+            x.beginPath();
+            x.arc(s[0][0], s[0][1], 1.2, 0, Math.PI * 2);
+            x.fillStyle = `rgba(${inkRGB.join(",")}, 0.95)`;
+            x.fill();
+          }
+          continue;
+        }
+        x.beginPath();
+        x.moveTo(s[0][0], s[0][1]);
+        for (let i = 1; i < s.length; i++) x.lineTo(s[i][0], s[i][1]);
+        x.stroke();
+      }
+    }
+
+    sigCanvas.addEventListener("pointerdown", (e) => {
+      e.stopPropagation();
+      sigCanvas.setPointerCapture(e.pointerId);
+      const r = sigCanvas.getBoundingClientRect();
+      curStroke = [[e.clientX - r.left, e.clientY - r.top]];
+      strokes.push(curStroke);
+      sigPlaceholder.style.display = "none";
+    });
+    sigCanvas.addEventListener("pointermove", (e) => {
+      if (!curStroke) return;
+      const r = sigCanvas.getBoundingClientRect();
+      curStroke.push([e.clientX - r.left, e.clientY - r.top]);
+      redrawSignature();
+    });
+    sigCanvas.addEventListener("pointerup", () => {
+      curStroke = null;
+    });
+    document
+      .getElementById("sigClear")
+      .addEventListener("pointerdown", (e) => e.stopPropagation());
+    document.getElementById("sigClear").addEventListener("click", () => {
+      strokes = [];
+      redrawSignature();
+      sigPlaceholder.style.display = "flex";
+    });
+
+    /* =================== Draggable card =================== */
+    function placeCardInitial() {
+      if (window.innerWidth <= 768) return;
+      const w = card.offsetWidth,
+        h = card.offsetHeight;
+      card.style.left =
+        Math.max(
+          20,
+          window.innerWidth - w - Math.max(40, window.innerWidth * 0.08),
+        ) + "px";
+      card.style.top = Math.max(16, (window.innerHeight - h) / 2) + "px";
+    }
+
+    let drag = null;
+    const isMobile = () => window.innerWidth <= 768;
+    card.addEventListener("pointerdown", (e) => {
+      if (isMobile()) return;
+      const t = e.target;
+      if (t.closest("a, button, canvas, input")) return;
+      drag = {
+        dx: e.clientX - card.offsetLeft,
+        dy: e.clientY - card.offsetTop,
+      };
+      card.setPointerCapture(e.pointerId);
+      card.classList.add("dragging");
+    });
+    card.addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const w = card.offsetWidth,
+        h = card.offsetHeight;
+      let nx = e.clientX - drag.dx,
+        ny = e.clientY - drag.dy;
+      nx = Math.min(Math.max(nx, 8), window.innerWidth - w - 8);
+      ny = Math.min(Math.max(ny, 8), window.innerHeight - h - 8);
+      card.style.left = nx + "px";
+      card.style.top = ny + "px";
+    });
+    card.addEventListener("pointerup", () => {
+      drag = null;
+      card.classList.remove("dragging");
+    });
+
+    /* =================== GitHub Build API =================== */
+    const statusEl = document.getElementById("status");
+    function fmt(n) {
+      if (typeof n !== "number" || isNaN(n)) return "0";
+      return n >= 1000
+        ? (n / 1000).toFixed(1).replace(/\.0k$/, "k") + "k"
+        : String(n);
+    }
+
+    async function build() {
+      const u = document.getElementById("usernameInput").value.trim();
+      if (!u) {
+        statusEl.textContent = "Please enter a GitHub username first.";
+        return;
+      }
+      const btn = document.getElementById("buildBtn");
+      btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="spin"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
+      statusEl.textContent = "Fetching GitHub data...";
+      try {
+        const res = await fetch(
+          "https://api.github.com/users/" + encodeURIComponent(u),
+        );
+        if (!res.ok)
+          throw new Error(
+            res.status === 404
+              ? `User "@${u}" not found.`
+              : `GitHub API error (${res.status}).`,
+          );
+        const d = await res.json();
+        document.getElementById("avatarImg").src = d.avatar_url;
+        document.getElementById("nameText").textContent = d.name || d.login;
+        document.getElementById("loginText").textContent = "@" + d.login;
+        document.getElementById("descText").textContent = d.bio
+          ? d.bio
+          : "Liquid-glass profile card for @" + (d.login) + ".";
+        document.getElementById("repoNum").textContent = fmt(d.public_repos);
+        document.getElementById("followerNum").textContent = fmt(d.followers);
+        document.getElementById("followingNum").textContent = fmt(
+          d.following,
+        );
+        document.getElementById("locationText").textContent =
+          d.location || d.company || "Planet Earth";
+        document.getElementById("joinedText").textContent =
+          "Joined " + new Date(d.created_at).getFullYear();
+
+        const year = new Date().getFullYear();
+        try {
+          const contribRes = await fetch(
+            "https://github-contributions-api.jogruber.de/v4/" +
+            encodeURIComponent(d.login) +
+            "?y=" +
+            year,
+          );
+          if (contribRes.ok) {
+            const c = await contribRes.json();
+            setContributions(c.contributions || [], year);
+          } else {
+            setContributions(buildRealisticDummyContributions(), year);
+          }
+        } catch (err) {
+          setContributions(buildRealisticDummyContributions(), year);
+        }
+
+        statusEl.textContent = "Card built for @" + d.login + " ✓";
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to load profile.";
+      }
+      btn.textContent = "Build";
+    }
+
+    document.getElementById("buildBtn").addEventListener("click", build);
+    document
+      .getElementById("usernameInput")
+      .addEventListener("keydown", (e) => {
+        if (e.key === "Enter") build();
+      });
+
+    /* =================== Custom Background Upload =================== */
+    document
+      .getElementById("bgBtn")
+      .addEventListener("click", () =>
+        document.getElementById("bgFile").click(),
+      );
+    document.getElementById("bgFile").addEventListener("change", (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const url = URL.createObjectURL(f);
+      const im = new Image();
+      im.onload = () => {
+        uploadTexture(im, im.naturalWidth, im.naturalHeight);
+        currentBgCanvas = im;
+        document.querySelectorAll(".preset-thumb").forEach(t => t.classList.remove("active"));
+        statusEl.textContent = "Custom background loaded ✓";
+        URL.revokeObjectURL(url);
+      };
+      im.src = url;
+    });
+
+    /* =================== Download Card =================== */
+    function roundRectPath(ctx, x, y, w, h, r) {
+      r = Math.min(r, w / 2, h / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function downloadCard() {
+      const rect = card.getBoundingClientRect();
+      const S = 2; // high resolution 2x scale
+      const WANT_PAD = Math.round(rect.width * 0.16);
+
+      const padL = Math.min(WANT_PAD, Math.max(0, Math.floor(rect.left)));
+      const padR = Math.min(
+        WANT_PAD,
+        Math.max(0, Math.floor(canvas.width - rect.right)),
+      );
+      const padT = Math.min(WANT_PAD, Math.max(0, Math.floor(rect.top)));
+      const padB = Math.min(
+        WANT_PAD,
+        Math.max(0, Math.floor(canvas.height - rect.bottom)),
+      );
+
+      const out = document.createElement("canvas");
+      out.width = (rect.width + padL + padR) * S;
+      out.height = (rect.height + padT + padB) * S;
+      const ctx = out.getContext("2d");
+      const ox = padL * S,
+        oy = padT * S;
+
+      // Render liquid glass background straight from the WebGL canvas
+      try {
+        ctx.drawImage(
+          canvas,
+          rect.left - padL,
+          rect.top - padT,
+          rect.width + padL + padR,
+          rect.height + padT + padB,
+          0,
+          0,
+          out.width,
+          out.height,
+        );
+      } catch (e) {
+        console.warn("Could not copy WebGL canvas:", e);
+      }
+
+      const ink = inkRGB.join(",");
+
+      function drawTextEl(el) {
+        const cs = getComputedStyle(el);
+        if (cs.display === "none") return;
+        const r = el.getBoundingClientRect();
+        const x = (r.left - rect.left) * S + ox,
+          y = (r.top - rect.top) * S + oy;
+        const fs = parseFloat(cs.fontSize);
+        ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${fs * S}px ${cs.fontFamily}`;
+        ctx.fillStyle = `rgb(${ink})`;
+        const words = el.textContent.trim().replace(/\s+/g, " ").split(" ");
+        const maxW = r.width * S;
+        let lines = [],
+          line = "";
+        for (const wd of words) {
+          const t = line ? line + " " + wd : wd;
+          if (ctx.measureText(t).width > maxW && line) {
+            lines.push(line);
+            line = wd;
+          } else line = t;
+        }
+        lines.push(line);
+        let lh = parseFloat(cs.lineHeight);
+        if (isNaN(lh)) lh = fs * 1.35;
+        if (lines.length === 1) lh = r.height;
+        ctx.textBaseline = "middle";
+        const center = cs.textAlign === "center";
+        lines.forEach((ln, i) => {
+          const ly = y + (i + 0.5) * lh * S;
+          if (center) {
+            ctx.textAlign = "center";
+            ctx.fillText(ln, x + maxW / 2, ly);
+          } else {
+            ctx.textAlign = "left";
+            ctx.fillText(ln, x, ly);
+          }
+        });
+      }
+
+      // Draw card layers
+      card.querySelectorAll("[data-dl]").forEach((el) => {
+        const kind = el.dataset.dl;
+        const r = el.getBoundingClientRect();
+        const x = (r.left - rect.left) * S + ox,
+          y = (r.top - rect.top) * S + oy;
+        const w = r.width * S,
+          h = r.height * S;
+        if (kind === "panel") {
+          const br =
+            parseFloat(getComputedStyle(el).borderTopLeftRadius) || 16;
+          roundRectPath(ctx, x, y, w, h, br * S);
+          ctx.fillStyle = `rgba(${ink}, 0.08)`;
+          ctx.fill();
+          ctx.strokeStyle = `rgba(${ink}, 0.45)`;
+          ctx.lineWidth = 1.5 * S;
+          ctx.stroke();
+        } else if (kind === "text") {
+          drawTextEl(el);
+        } else if (kind === "canvas") {
+          ctx.drawImage(el, x, y, w, h);
+        } else if (kind === "hr") {
+          ctx.strokeStyle = `rgba(${ink}, 0.55)`;
+          ctx.lineWidth = 1.5 * S;
+          ctx.beginPath();
+          ctx.moveTo(x, y);
+          ctx.lineTo(x + w, y);
+          ctx.stroke();
+        } else if (kind === "avatar") {
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(x + w / 2, y + h / 2, w / 2, 0, Math.PI * 2);
+          ctx.clip();
+          ctx.fillStyle = "#1e293b";
+          ctx.fillRect(x, y, w, h);
+          try {
+            const av = document.getElementById("avatarImg");
+            ctx.drawImage(av, x, y, w, h);
+          } catch (e) { }
+          ctx.restore();
+          ctx.beginPath();
+          ctx.arc(x + w / 2, y + h / 2, w / 2 - 2, 0, Math.PI * 2);
+          ctx.strokeStyle = "rgba(255, 255, 255, 0.9)";
+          ctx.lineWidth = 3.5 * S;
+          ctx.stroke();
+        }
+      });
+
+      try {
+        const a = document.createElement("a");
+        const username = document.getElementById("loginText").textContent.replace("@", "") || "github";
+        a.download = `${username}-glass-card.png`;
+        a.href = out.toDataURL("image/png");
+        a.click();
+        statusEl.textContent = "Card downloaded successfully ✓";
+      } catch (e) {
+        statusEl.textContent =
+          "Download note: If your custom background has CORS limits, try choosing a preset above or uploading a local file.";
+      }
+    }
+    document
+      .getElementById("downloadBtn")
+      .addEventListener("click", downloadCard);
+
+    /* =================== WebGL Render Loop =================== */
+    function render() {
+      const rect = card.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = canvas.height - (rect.top + rect.height / 2);
+
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform3f(U.resolution, canvas.width, canvas.height, 1.0);
+      gl.uniform2f(U.imgRes, imgW, imgH);
+      gl.uniform2f(U.cardPos, cx, cy);
+      gl.uniform2f(U.cardHalf, rect.width / 2 + 4, rect.height / 2 + 4);
+      gl.uniform1f(U.white, whiteness);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.uniform1i(U.texture, 0);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+      requestAnimationFrame(render);
+    }
+
+    let lastW = window.innerWidth;
+    window.addEventListener("resize", () => {
+      setCanvasSize();
+      if (window.innerWidth > 768) {
+        const w = card.offsetWidth,
+          h = card.offsetHeight;
+        card.style.left =
+          Math.min(
+            Math.max(card.offsetLeft, 8),
+            Math.max(8, window.innerWidth - w - 8),
+          ) + "px";
+        card.style.top =
+          Math.min(
+            Math.max(card.offsetTop, 8),
+            Math.max(8, window.innerHeight - h - 8),
+          ) + "px";
+        if (lastW <= 768) placeCardInitial();
+      }
+      lastW = window.innerWidth;
+      drawContrib();
+      sizeSig();
+    });
+
+    /* Initialization */
+    applyWhiteness(0);
+    placeCardInitial();
+    setContributions(buildRealisticDummyContributions(), new Date().getFullYear());
+    sizeSig();
+    render();
+  </script>
 </body>
+
 </html>
